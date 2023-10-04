@@ -1,7 +1,11 @@
-﻿namespace EBanking.UI;
+﻿using EBanking.Data;
+using EBanking.UI.Properties;
+
+namespace EBanking.UI;
 
 public partial class App : Form
 {
+    private readonly EBankingDbContext _db = new(Resources.DBPath);
     private int _formCount;
     public static App Instance { get; } = new();
 
