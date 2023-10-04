@@ -79,6 +79,7 @@ partial class Register
         btnRegister.TabIndex = 4;
         btnRegister.Text = "Register";
         btnRegister.UseVisualStyleBackColor = true;
+        btnRegister.Click += BtnRegister_Click;
         // 
         // lblEmail
         // 

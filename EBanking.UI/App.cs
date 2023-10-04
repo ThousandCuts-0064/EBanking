@@ -1,17 +1,33 @@
 ﻿using EBanking.Data;
+using EBanking.Data.Interfaces;
 using EBanking.UI.Properties;
 
 namespace EBanking.UI;
 
 public partial class App : Form
 {
-    private readonly EBankingDbContext _db = new(Resources.DBPath);
+    private IEbankingDbContext _dbContext = null!;
     private int _formCount;
     public static App Instance { get; } = new();
 
-    private App() => InitializeComponent();
+    private App()
+    {
+        InitializeComponent();
+    }
 
-    protected override void OnLoad(EventArgs e) => new Login().Show();
+    public static void Initialize(IEbankingDbContext dbContext)
+    {
+        Instance._dbContext = dbContext;
+    }
+
+    protected override void OnLoad(EventArgs e)
+    {
+        if (_dbContext is null)
+            throw new InvalidProgramException($"{nameof(App)}.{nameof(Initialize)} was not called");
+
+        new Login(_dbContext).Show();
+    }
+
     protected override void OnVisibleChanged(EventArgs e) => Hide();
 
     private void OnFormCreated() => _formCount++;
