@@ -1,8 +1,6 @@
-﻿using EBanking.Data;
-using EBanking.Data.Interfaces;
-using EBanking.UI.Properties;
+﻿using EBanking.Data.Interfaces;
 
-namespace EBanking.UI;
+namespace EBanking.UI.Forms;
 
 public partial class App : Form
 {

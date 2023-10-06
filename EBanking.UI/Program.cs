@@ -1,5 +1,5 @@
 using EBanking.Data;
-using EBanking.UI.Properties;
+using EBanking.UI.Forms;
 
 namespace EBanking.UI;
 
@@ -16,7 +16,7 @@ internal static class Program
         // To customize application configuration such as set high DPI settings or default font,
         // see https://aka.ms/applicationconfiguration.
         ApplicationConfiguration.Initialize();
-        App.Initialize(new EBankingDbContext(Resources.DBPath));
+        App.Initialize(new EBankingDbContext("../../../../Database/database.json"));
         Application.Run(App.Instance);
     }
 }

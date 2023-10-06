@@ -1,4 +1,4 @@
-﻿namespace EBanking.UI;
+﻿namespace EBanking.UI.Forms;
 
 partial class App
 {
@@ -34,6 +34,7 @@ partial class App
         // 
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
+        BackColor = Color.HotPink;
         ClientSize = new Size(100, 100);
         ControlBox = false;
         FormBorderStyle = FormBorderStyle.None;
