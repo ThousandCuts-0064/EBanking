@@ -20,20 +20,23 @@ public partial class CreateAccount : Form
     private void BtnOK_Click(object sender, EventArgs e)
     {
         if (_tbName.Text is "")
+        {
             MessageBox.Show(
                 "Account name cannot be empty!",
                 "Invalid name",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
+        }
         else if (_dbContext.UserAccounts.All
-            .Where(uc => uc.UserId == _userId)
             .Select(uc => uc.FriendlyName)
             .Contains(_tbName.Text))
+        {
             MessageBox.Show(
                 $"Account with name {_tbName.Text} already exists!",
                 "Invalid name",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
+        }
         else
         {
             UserAccount userAccount = new()

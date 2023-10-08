@@ -31,11 +31,13 @@ public partial class Login : App.Form
         User? user = _dbContext.Users.All.FirstOrDefault(u => Comparers.UserLogin.Equals(match, u));
 
         if (user is null)
+        {
             MessageBox.Show(
                 "No Username and Password match found",
                 "Invalid login",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
+        }
         else
         {
             new UserForm(_dbContext, user).Show();

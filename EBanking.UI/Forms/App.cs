@@ -8,15 +8,9 @@ public partial class App : Form
     private int _formCount;
     public static App Instance { get; } = new();
 
-    private App()
-    {
-        InitializeComponent();
-    }
+    private App() => InitializeComponent();
 
-    public static void Initialize(IEbankingDbContext dbContext)
-    {
-        Instance._dbContext = dbContext;
-    }
+    public static void Initialize(IEbankingDbContext dbContext) => Instance._dbContext = dbContext;
 
     protected override void OnLoad(EventArgs e)
     {
@@ -28,7 +22,7 @@ public partial class App : Form
 
     protected override void OnVisibleChanged(EventArgs e) => Hide();
 
-    private void OnFormCreated() => _formCount++;
+    private void OnFormLoaded() => _formCount++;
 
     private void OnFormClosed()
     {
@@ -40,7 +34,7 @@ public partial class App : Form
 
     public class Form : System.Windows.Forms.Form
     {
-        protected Form() => Instance.OnFormCreated();
+        protected override void OnLoad(EventArgs e) => Instance.OnFormLoaded(); // If this is in the constructor the designer will break
 
         protected override void OnClosed(EventArgs e) => Instance.OnFormClosed();
     }
