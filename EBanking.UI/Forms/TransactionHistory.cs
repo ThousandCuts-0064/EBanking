@@ -1,6 +1,5 @@
 ﻿using EBanking.Data.Entities;
 using EBanking.Data.Interfaces;
-using EBanking.UI.UserControls;
 
 namespace EBanking.UI.Forms;
 
@@ -15,18 +14,14 @@ public partial class TransactionHistory : Form
         _dbContext = dbContext;
         _user = user;
         Text = _user.FullName;
-        _tlpTransactions.RowStyles.Clear();
-        int i = 0;
-        RowStyle rowStyle = new(SizeType.Percent, 20);
-        HashSet<int> accountIds = _dbContext.UserAccounts.All
-            .Where(uc => uc.UserId == _user.Id)
-            .Select(uc => uc.Id)
-            .ToHashSet();
-        foreach (var transaction in _dbContext.Transactions.All
-            .Where(t => accountIds.Contains(t.UserAccountId)))
-        {
-            _tlpTransactions.RowStyles.Add(rowStyle);
-            _tlpTransactions.Controls.Add(new TransactionControl(_dbContext, transaction), 0, i++);
-        }
+        Dictionary<int, string> userAccounts = _dbContext.UserAccounts.All
+            .Where(ua => ua.UserId == _user.Id)
+            .ToDictionary(ua => ua.Id, ua => ua.FriendlyName);
+        _dgvMain.DataSource = _dbContext.Transactions.All
+            .Where(t => userAccounts.ContainsKey(t.UserAccountId))
+            .Select(t => new TransactionRecord(userAccounts[t.UserAccountId], t.Type, t.Amount, t.EventDate))
+            .ToList();
     }
+
+    private record TransactionRecord(string Account, TransactionType Type, decimal Amount, DateTime Date);
 }

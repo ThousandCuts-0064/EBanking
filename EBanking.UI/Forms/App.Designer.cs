@@ -35,15 +35,18 @@ partial class App
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
         BackColor = Color.HotPink;
-        ClientSize = new Size(100, 100);
+        ClientSize = new Size(0, 0);
         ControlBox = false;
         FormBorderStyle = FormBorderStyle.None;
         MaximizeBox = false;
         MdiChildrenMinimizedAnchorBottom = false;
         MinimizeBox = false;
         Name = "App";
+        Opacity = 0D;
         ShowIcon = false;
+        StartPosition = FormStartPosition.CenterParent;
         Text = "App";
+        TransparencyKey = Color.HotPink;
         ResumeLayout(false);
     }
 

@@ -1,6 +1,6 @@
 ﻿namespace EBanking.UI.Forms;
 
-partial class MakeTransaction
+partial class TransactionForm
 {
     /// <summary>
     /// Required designer variable.
@@ -39,31 +39,35 @@ partial class MakeTransaction
         // _lbxAccounts
         // 
         _lbxAccounts.FormattingEnabled = true;
-        _lbxAccounts.ItemHeight = 15;
-        _lbxAccounts.Location = new Point(12, 12);
+        _lbxAccounts.ItemHeight = 20;
+        _lbxAccounts.Location = new Point(14, 16);
+        _lbxAccounts.Margin = new Padding(3, 4, 3, 4);
         _lbxAccounts.Name = "_lbxAccounts";
-        _lbxAccounts.Size = new Size(170, 109);
+        _lbxAccounts.Size = new Size(194, 144);
         _lbxAccounts.TabIndex = 0;
         // 
         // _tbKey
         // 
-        _tbKey.Location = new Point(245, 12);
+        _tbKey.Location = new Point(280, 16);
+        _tbKey.Margin = new Padding(3, 4, 3, 4);
         _tbKey.Name = "_tbKey";
-        _tbKey.Size = new Size(127, 23);
+        _tbKey.Size = new Size(145, 27);
         _tbKey.TabIndex = 1;
         // 
         // _tbAmount
         // 
-        _tbAmount.Location = new Point(245, 41);
+        _tbAmount.Location = new Point(280, 55);
+        _tbAmount.Margin = new Padding(3, 4, 3, 4);
         _tbAmount.Name = "_tbAmount";
-        _tbAmount.Size = new Size(127, 23);
+        _tbAmount.Size = new Size(145, 27);
         _tbAmount.TabIndex = 2;
         // 
         // _btnConfirm
         // 
-        _btnConfirm.Location = new Point(188, 70);
+        _btnConfirm.Location = new Point(215, 93);
+        _btnConfirm.Margin = new Padding(3, 4, 3, 4);
         _btnConfirm.Name = "_btnConfirm";
-        _btnConfirm.Size = new Size(184, 51);
+        _btnConfirm.Size = new Size(210, 68);
         _btnConfirm.TabIndex = 3;
         _btnConfirm.Text = "Confirm";
         _btnConfirm.UseVisualStyleBackColor = true;
@@ -72,26 +76,26 @@ partial class MakeTransaction
         // _lblKey
         // 
         _lblKey.AutoSize = true;
-        _lblKey.Location = new Point(188, 15);
+        _lblKey.Location = new Point(215, 20);
         _lblKey.Name = "_lblKey";
-        _lblKey.Size = new Size(26, 15);
+        _lblKey.Size = new Size(33, 20);
         _lblKey.TabIndex = 4;
         _lblKey.Text = "Key";
         // 
         // _lblAmount
         // 
         _lblAmount.AutoSize = true;
-        _lblAmount.Location = new Point(188, 44);
+        _lblAmount.Location = new Point(215, 59);
         _lblAmount.Name = "_lblAmount";
-        _lblAmount.Size = new Size(51, 15);
+        _lblAmount.Size = new Size(62, 20);
         _lblAmount.TabIndex = 5;
         _lblAmount.Text = "Amount";
         // 
         // MakeTransaction
         // 
-        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(384, 133);
+        ClientSize = new Size(439, 177);
         Controls.Add(_lblAmount);
         Controls.Add(_lblKey);
         Controls.Add(_btnConfirm);
@@ -99,8 +103,9 @@ partial class MakeTransaction
         Controls.Add(_tbKey);
         Controls.Add(_lbxAccounts);
         FormBorderStyle = FormBorderStyle.FixedToolWindow;
+        Margin = new Padding(3, 4, 3, 4);
         Name = "MakeTransaction";
-        Text = "Username";
+        Text = "Transaction";
         ResumeLayout(false);
         PerformLayout();
     }

@@ -29,45 +29,39 @@ partial class UserForm
     private void InitializeComponent()
     {
         _btnCreateAccount = new Button();
-        _lbxAccounts = new ListBox();
         _btnMakeTransaction = new Button();
         _btnTransactionHistory = new Button();
         _btnDeposit = new Button();
         _btnWithdraw = new Button();
-        tableLayoutPanel1 = new TableLayoutPanel();
-        tableLayoutPanel1.SuspendLayout();
+        _tlpButtons = new TableLayoutPanel();
+        _dgvAccounts = new DataGridView();
+        _tlpMain = new TableLayoutPanel();
+        _tlpButtons.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)_dgvAccounts).BeginInit();
+        _tlpMain.SuspendLayout();
         SuspendLayout();
         // 
         // _btnCreateAccount
         // 
+        _btnCreateAccount.AutoSize = true;
+        _btnCreateAccount.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         _btnCreateAccount.Dock = DockStyle.Fill;
-        _btnCreateAccount.Location = new Point(3, 266);
-        _btnCreateAccount.Margin = new Padding(3, 2, 3, 2);
+        _btnCreateAccount.Location = new Point(3, 223);
         _btnCreateAccount.Name = "_btnCreateAccount";
-        _btnCreateAccount.Size = new Size(159, 65);
+        _btnCreateAccount.Size = new Size(92, 49);
         _btnCreateAccount.TabIndex = 0;
         _btnCreateAccount.Text = "Create Account";
         _btnCreateAccount.UseVisualStyleBackColor = true;
         _btnCreateAccount.Click += BtnCreateAccount_Click;
         // 
-        // _lbxAccounts
-        // 
-        _lbxAccounts.FormattingEnabled = true;
-        _lbxAccounts.ItemHeight = 15;
-        _lbxAccounts.Location = new Point(183, 14);
-        _lbxAccounts.Margin = new Padding(3, 2, 3, 2);
-        _lbxAccounts.Name = "_lbxAccounts";
-        _lbxAccounts.Size = new Size(165, 334);
-        _lbxAccounts.Sorted = true;
-        _lbxAccounts.TabIndex = 1;
-        // 
         // _btnMakeTransaction
         // 
+        _btnMakeTransaction.AutoSize = true;
+        _btnMakeTransaction.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         _btnMakeTransaction.Dock = DockStyle.Fill;
-        _btnMakeTransaction.Location = new Point(3, 134);
-        _btnMakeTransaction.Margin = new Padding(3, 2, 3, 2);
+        _btnMakeTransaction.Location = new Point(3, 113);
         _btnMakeTransaction.Name = "_btnMakeTransaction";
-        _btnMakeTransaction.Size = new Size(159, 62);
+        _btnMakeTransaction.Size = new Size(92, 49);
         _btnMakeTransaction.TabIndex = 2;
         _btnMakeTransaction.Text = "Make Transaction";
         _btnMakeTransaction.UseVisualStyleBackColor = true;
@@ -75,11 +69,12 @@ partial class UserForm
         // 
         // _btnTransactionHistory
         // 
+        _btnTransactionHistory.AutoSize = true;
+        _btnTransactionHistory.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         _btnTransactionHistory.Dock = DockStyle.Fill;
-        _btnTransactionHistory.Location = new Point(3, 200);
-        _btnTransactionHistory.Margin = new Padding(3, 2, 3, 2);
+        _btnTransactionHistory.Location = new Point(3, 168);
         _btnTransactionHistory.Name = "_btnTransactionHistory";
-        _btnTransactionHistory.Size = new Size(159, 62);
+        _btnTransactionHistory.Size = new Size(92, 49);
         _btnTransactionHistory.TabIndex = 3;
         _btnTransactionHistory.Text = "Transaction History";
         _btnTransactionHistory.UseVisualStyleBackColor = true;
@@ -87,11 +82,12 @@ partial class UserForm
         // 
         // _btnDeposit
         // 
+        _btnDeposit.AutoSize = true;
+        _btnDeposit.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         _btnDeposit.Dock = DockStyle.Fill;
-        _btnDeposit.Location = new Point(3, 2);
-        _btnDeposit.Margin = new Padding(3, 2, 3, 2);
+        _btnDeposit.Location = new Point(3, 3);
         _btnDeposit.Name = "_btnDeposit";
-        _btnDeposit.Size = new Size(159, 62);
+        _btnDeposit.Size = new Size(92, 49);
         _btnDeposit.TabIndex = 4;
         _btnDeposit.Text = "Deposit";
         _btnDeposit.UseVisualStyleBackColor = true;
@@ -99,57 +95,110 @@ partial class UserForm
         // 
         // _btnWithdraw
         // 
+        _btnWithdraw.AutoSize = true;
+        _btnWithdraw.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         _btnWithdraw.Dock = DockStyle.Fill;
-        _btnWithdraw.Location = new Point(3, 68);
-        _btnWithdraw.Margin = new Padding(3, 2, 3, 2);
+        _btnWithdraw.Location = new Point(3, 58);
         _btnWithdraw.Name = "_btnWithdraw";
-        _btnWithdraw.Size = new Size(159, 62);
+        _btnWithdraw.Size = new Size(92, 49);
         _btnWithdraw.TabIndex = 5;
         _btnWithdraw.Text = "Withdraw";
         _btnWithdraw.UseVisualStyleBackColor = true;
         _btnWithdraw.Click += BtnWithdraw_Click;
         // 
-        // tableLayoutPanel1
+        // _tlpButtons
         // 
-        tableLayoutPanel1.ColumnCount = 1;
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
-        tableLayoutPanel1.Controls.Add(_btnDeposit, 0, 0);
-        tableLayoutPanel1.Controls.Add(_btnTransactionHistory, 0, 3);
-        tableLayoutPanel1.Controls.Add(_btnCreateAccount, 0, 4);
-        tableLayoutPanel1.Controls.Add(_btnWithdraw, 0, 1);
-        tableLayoutPanel1.Controls.Add(_btnMakeTransaction, 0, 2);
-        tableLayoutPanel1.Location = new Point(12, 12);
-        tableLayoutPanel1.Name = "tableLayoutPanel1";
-        tableLayoutPanel1.RowCount = 5;
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
-        tableLayoutPanel1.Size = new Size(165, 333);
-        tableLayoutPanel1.TabIndex = 6;
+        _tlpButtons.AutoSize = true;
+        _tlpButtons.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        _tlpButtons.ColumnCount = 1;
+        _tlpButtons.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+        _tlpButtons.Controls.Add(_btnTransactionHistory, 0, 3);
+        _tlpButtons.Controls.Add(_btnCreateAccount, 0, 4);
+        _tlpButtons.Controls.Add(_btnWithdraw, 0, 1);
+        _tlpButtons.Controls.Add(_btnMakeTransaction, 0, 2);
+        _tlpButtons.Controls.Add(_btnDeposit, 0, 0);
+        _tlpButtons.Dock = DockStyle.Fill;
+        _tlpButtons.Location = new Point(3, 4);
+        _tlpButtons.Margin = new Padding(3, 4, 3, 4);
+        _tlpButtons.Name = "_tlpButtons";
+        _tlpButtons.RowCount = 5;
+        _tlpButtons.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+        _tlpButtons.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+        _tlpButtons.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+        _tlpButtons.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+        _tlpButtons.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
+        _tlpButtons.Size = new Size(98, 275);
+        _tlpButtons.TabIndex = 6;
+        // 
+        // _dgvAccounts
+        // 
+        _dgvAccounts.AllowUserToAddRows = false;
+        _dgvAccounts.AllowUserToDeleteRows = false;
+        _dgvAccounts.AllowUserToResizeRows = false;
+        _dgvAccounts.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        _dgvAccounts.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+        _dgvAccounts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+        _dgvAccounts.Dock = DockStyle.Fill;
+        _dgvAccounts.Location = new Point(107, 3);
+        _dgvAccounts.MultiSelect = false;
+        _dgvAccounts.Name = "_dgvAccounts";
+        _dgvAccounts.ReadOnly = true;
+        _dgvAccounts.RowHeadersVisible = false;
+        _dgvAccounts.RowHeadersWidth = 51;
+        _dgvAccounts.RowTemplate.Height = 29;
+        _dgvAccounts.RowTemplate.ReadOnly = true;
+        _dgvAccounts.RowTemplate.Resizable = DataGridViewTriState.False;
+        _dgvAccounts.SelectionMode = DataGridViewSelectionMode.CellSelect;
+        _dgvAccounts.Size = new Size(412, 277);
+        _dgvAccounts.TabIndex = 7;
+        _dgvAccounts.VirtualMode = true;
+        // 
+        // _tlpMain
+        // 
+        _tlpMain.AutoSize = true;
+        _tlpMain.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        _tlpMain.ColumnCount = 2;
+        _tlpMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20F));
+        _tlpMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 80F));
+        _tlpMain.Controls.Add(_tlpButtons, 0, 0);
+        _tlpMain.Controls.Add(_dgvAccounts, 1, 0);
+        _tlpMain.Dock = DockStyle.Fill;
+        _tlpMain.Location = new Point(0, 0);
+        _tlpMain.Name = "_tlpMain";
+        _tlpMain.RowCount = 1;
+        _tlpMain.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+        _tlpMain.Size = new Size(522, 283);
+        _tlpMain.TabIndex = 8;
         // 
         // UserForm
         // 
-        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(584, 356);
-        Controls.Add(tableLayoutPanel1);
-        Controls.Add(_lbxAccounts);
-        Margin = new Padding(3, 2, 3, 2);
+        AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        ClientSize = new Size(522, 283);
+        Controls.Add(_tlpMain);
+        MinimumSize = new Size(540, 330);
         Name = "UserForm";
+        SizeGripStyle = SizeGripStyle.Show;
+        StartPosition = FormStartPosition.CenterScreen;
         Text = "FullName";
-        tableLayoutPanel1.ResumeLayout(false);
+        _tlpButtons.ResumeLayout(false);
+        _tlpButtons.PerformLayout();
+        ((System.ComponentModel.ISupportInitialize)_dgvAccounts).EndInit();
+        _tlpMain.ResumeLayout(false);
+        _tlpMain.PerformLayout();
         ResumeLayout(false);
+        PerformLayout();
     }
 
     #endregion
 
     private Button _btnCreateAccount;
-    private ListBox _lbxAccounts;
     private Button _btnMakeTransaction;
     private Button _btnTransactionHistory;
     private Button _btnDeposit;
     private Button _btnWithdraw;
-    private TableLayoutPanel tableLayoutPanel1;
+    private TableLayoutPanel _tlpButtons;
+    private DataGridView _dgvAccounts;
+    private TableLayoutPanel _tlpMain;
 }

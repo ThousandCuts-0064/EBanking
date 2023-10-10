@@ -1,7 +1,5 @@
 ﻿using System.Net.Mail;
-using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 using EBanking.Data.Entities;
 using EBanking.Data.Interfaces;
 
@@ -24,7 +22,7 @@ public partial class Register : App.Form
         User user = new()
         {
             Username = _tbUsername.Text,
-            Password = _tbPassword.Text,
+            Password = Encryption.SHA512(_tbPassword.Text),
             FullName = _tbName.Text,
             Email = _tbEmail.Text,
             DateRegistered = DateTime.Now,
@@ -34,41 +32,27 @@ public partial class Register : App.Form
             sb.AppendLine("Username must contain between 4 and 16 symbols");
 
         foreach (var symbol in user.Username)
-        {
             if (symbol is (< 'a' or > 'z') and (< 'A' or > 'Z') and (< '0' or > '9'))
             {
                 sb.AppendLine("Username can only contain symbols: a-z A-Z 0-9");
                 break;
             }
-        }
+
+        if (_tbPassword.Text != _tbRepeatPassword.Text)
+            sb.AppendLine("The repeat password is different");
 
         if (_dbContext.Users.All.Contains(user, Comparers.UserRegister))
             sb.AppendLine("Username is already taken");
 
         bool hasLetter = false;
         bool hasDigit = false;
-        foreach (var symbol in user.Password)
+        foreach (var symbol in _tbPassword.Text)
         {
             if (char.IsDigit(symbol))
-            {
                 hasDigit = true;
-                continue;
-            }
 
-            if (char.IsLetter(symbol))
-            {
+            else if (char.IsLetter(symbol))
                 hasLetter = true;
-                continue;
-            }
-
-            //if (symbol is >= 'a' and <= 'z' or >= 'A' and <= 'Z')
-            //{
-            //    hasLetter = true;
-            //    continue;
-            //}
-
-            //sb.AppendLine("Password can only contain symbols: a-z A-Z 0-9");
-            //break;
         }
 
         if (!hasLetter)
@@ -77,10 +61,10 @@ public partial class Register : App.Form
         if (!hasDigit)
             sb.AppendLine("Password must contain at least 1 digit");
 
-        if (user.Password.Length < 8)
+        if (_tbPassword.Text.Length < 8)
             sb.AppendLine("Password must be at least 8 symbols");
 
-        if (!EmailRegex().IsMatch(user.Email))
+        if (!MailAddress.TryCreate(user.Email, out _))
             sb.AppendLine("Invalid email format");
 
         string error = sb.ToString();
@@ -88,12 +72,10 @@ public partial class Register : App.Form
         if (error is "")
         {
             _dbContext.Users.Insert(user);
+            new UserForm(_dbContext, user).Show();
             Close();
         }
         else
             MessageBox.Show(error, "Invalid register", MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
-
-    [GeneratedRegex("/^([\\w+-]+\\.)*[\\w+-]+@([\\w+-]+\\.)*[\\w+-]+\\.[a-zA-Z]{2,4}$/")]
-    private static partial Regex EmailRegex();
 }

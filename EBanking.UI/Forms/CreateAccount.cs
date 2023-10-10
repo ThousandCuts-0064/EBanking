@@ -28,7 +28,7 @@ public partial class CreateAccount : Form
                 MessageBoxIcon.Error);
         }
         else if (_dbContext.UserAccounts.All
-            .Select(uc => uc.FriendlyName)
+            .Select(ua => ua.FriendlyName)
             .Contains(_tbName.Text))
         {
             MessageBox.Show(

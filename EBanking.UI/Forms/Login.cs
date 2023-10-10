@@ -15,9 +15,7 @@ public partial class Login : App.Form
 
     private void BtnRegister_Click(object sender, EventArgs e)
     {
-        Register register = new(_dbContext);
-        register.Show();
-        register.Location = Location;
+        new Register(_dbContext).Show();
         Close();
     }
 
@@ -26,7 +24,7 @@ public partial class Login : App.Form
         User match = new()
         {
             Username = _tbUsername.Text,
-            Password = _tbPassword.Text
+            Password = Encryption.SHA512(_tbPassword.Text)
         };
         User? user = _dbContext.Users.All.FirstOrDefault(u => Comparers.UserLogin.Equals(match, u));
 

@@ -39,43 +39,41 @@ partial class Login
         // _lblUsername
         // 
         _lblUsername.AutoSize = true;
-        _lblUsername.Location = new Point(10, 11);
+        _lblUsername.Location = new Point(11, 15);
         _lblUsername.Name = "_lblUsername";
-        _lblUsername.Size = new Size(60, 15);
+        _lblUsername.Size = new Size(75, 20);
         _lblUsername.TabIndex = 0;
         _lblUsername.Text = "Username";
         // 
         // _lblPassword
         // 
         _lblPassword.AutoSize = true;
-        _lblPassword.Location = new Point(10, 36);
+        _lblPassword.Location = new Point(11, 48);
         _lblPassword.Name = "_lblPassword";
-        _lblPassword.Size = new Size(57, 15);
+        _lblPassword.Size = new Size(70, 20);
         _lblPassword.TabIndex = 1;
         _lblPassword.Text = "Password";
         // 
         // _tbUsername
         // 
-        _tbUsername.Location = new Point(84, 9);
-        _tbUsername.Margin = new Padding(3, 2, 3, 2);
+        _tbUsername.Location = new Point(96, 12);
         _tbUsername.Name = "_tbUsername";
-        _tbUsername.Size = new Size(144, 23);
+        _tbUsername.Size = new Size(164, 27);
         _tbUsername.TabIndex = 2;
         // 
         // _tbPassword
         // 
-        _tbPassword.Location = new Point(84, 34);
-        _tbPassword.Margin = new Padding(3, 2, 3, 2);
+        _tbPassword.Location = new Point(96, 45);
         _tbPassword.Name = "_tbPassword";
-        _tbPassword.Size = new Size(144, 23);
+        _tbPassword.PasswordChar = '*';
+        _tbPassword.Size = new Size(164, 27);
         _tbPassword.TabIndex = 3;
         // 
         // _btnRegister
         // 
-        _btnRegister.Location = new Point(10, 61);
-        _btnRegister.Margin = new Padding(3, 2, 3, 2);
+        _btnRegister.Location = new Point(11, 81);
         _btnRegister.Name = "_btnRegister";
-        _btnRegister.Size = new Size(106, 31);
+        _btnRegister.Size = new Size(121, 41);
         _btnRegister.TabIndex = 4;
         _btnRegister.Text = "Register";
         _btnRegister.UseVisualStyleBackColor = true;
@@ -83,10 +81,9 @@ partial class Login
         // 
         // _btnLogin
         // 
-        _btnLogin.Location = new Point(122, 61);
-        _btnLogin.Margin = new Padding(3, 2, 3, 2);
+        _btnLogin.Location = new Point(139, 81);
         _btnLogin.Name = "_btnLogin";
-        _btnLogin.Size = new Size(106, 31);
+        _btnLogin.Size = new Size(121, 41);
         _btnLogin.TabIndex = 5;
         _btnLogin.Text = "Login";
         _btnLogin.UseVisualStyleBackColor = true;
@@ -94,18 +91,18 @@ partial class Login
         // 
         // Login
         // 
-        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(238, 100);
+        ClientSize = new Size(272, 133);
         Controls.Add(_btnLogin);
         Controls.Add(_btnRegister);
         Controls.Add(_tbPassword);
         Controls.Add(_tbUsername);
         Controls.Add(_lblPassword);
         Controls.Add(_lblUsername);
-        FormBorderStyle = FormBorderStyle.FixedSingle;
-        Margin = new Padding(3, 2, 3, 2);
+        FormBorderStyle = FormBorderStyle.FixedToolWindow;
         Name = "Login";
+        StartPosition = FormStartPosition.CenterScreen;
         Text = "Login";
         ResumeLayout(false);
         PerformLayout();

@@ -36,26 +36,24 @@ partial class CreateAccount
         // _lblName
         // 
         _lblName.AutoSize = true;
-        _lblName.Location = new Point(10, 11);
+        _lblName.Location = new Point(11, 15);
         _lblName.Name = "_lblName";
-        _lblName.Size = new Size(39, 15);
+        _lblName.Size = new Size(49, 20);
         _lblName.TabIndex = 0;
         _lblName.Text = "Name";
         // 
         // _tbName
         // 
-        _tbName.Location = new Point(59, 9);
-        _tbName.Margin = new Padding(3, 2, 3, 2);
+        _tbName.Location = new Point(67, 12);
         _tbName.Name = "_tbName";
-        _tbName.Size = new Size(112, 23);
+        _tbName.Size = new Size(127, 27);
         _tbName.TabIndex = 1;
         // 
         // _btnOK
         // 
-        _btnOK.Location = new Point(10, 34);
-        _btnOK.Margin = new Padding(3, 2, 3, 2);
+        _btnOK.Location = new Point(11, 45);
         _btnOK.Name = "_btnOK";
-        _btnOK.Size = new Size(161, 22);
+        _btnOK.Size = new Size(184, 29);
         _btnOK.TabIndex = 2;
         _btnOK.Text = "OK";
         _btnOK.UseVisualStyleBackColor = true;
@@ -63,15 +61,15 @@ partial class CreateAccount
         // 
         // CreateAccount
         // 
-        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(180, 64);
+        ClientSize = new Size(206, 85);
         Controls.Add(_btnOK);
         Controls.Add(_tbName);
         Controls.Add(_lblName);
         FormBorderStyle = FormBorderStyle.FixedToolWindow;
-        Margin = new Padding(3, 2, 3, 2);
         Name = "CreateAccount";
+        StartPosition = FormStartPosition.CenterScreen;
         Text = "Create Account";
         ResumeLayout(false);
         PerformLayout();

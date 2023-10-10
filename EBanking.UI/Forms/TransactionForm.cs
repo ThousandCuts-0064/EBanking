@@ -5,21 +5,22 @@ using EBanking.Data.Interfaces;
 using EBanking.UI.Wrappers;
 
 namespace EBanking.UI.Forms;
-public partial class MakeTransaction : Form
+
+public partial class TransactionForm : Form
 {
     private readonly UserAccountWrap[] _userAccountWrappers;
     private readonly IEbankingDbContext _dbContext;
     private readonly User _user;
 
-    public MakeTransaction(IEbankingDbContext dbContext, User user)
+    public TransactionForm(IEbankingDbContext dbContext, User user)
     {
         InitializeComponent();
         _dbContext = dbContext;
         _user = user;
         Text = $"{_user.FullName}: Transaction";
         _userAccountWrappers = _dbContext.UserAccounts.All
-            .Where(uc => uc.UserId == _user.Id)
-            .Select(uc => new UserAccountWrap(uc))
+            .Where(ua => ua.UserId == _user.Id)
+            .Select(ua => new UserAccountWrap(ua))
             .ToArray();
         _lbxAccounts.Items.AddRange(_userAccountWrappers);
     }
@@ -53,25 +54,24 @@ public partial class MakeTransaction : Form
         if (!Guid.TryParse(_tbKey.Text, out Guid guid))
             sb.AppendLine("Invalid Guid");
 
-        else if (!guid.Equals(thisUserAccountVM?.Guid))
+        else if (guid.Equals(thisUserAccountVM?.Guid))
             sb.AppendLine("Please enter a Guid of another account");
 
         else
         {
-            if (thisUserAccountVM.Balance - amount < 0)
+            if (thisUserAccountVM!.Balance - amount < 0)
                 sb.AppendLine("Insufficient amount");
 
-            otherUserAccount = _dbContext.UserAccounts.All.FirstOrDefault(uc => uc.Key.Equals(guid));
+            otherUserAccount = _dbContext.UserAccounts.All.FirstOrDefault(ua => ua.Key.Equals(guid));
             if (otherUserAccount is null)
                 sb.AppendLine("Account with this Guid was not found");
         }
-
 
         string error = sb.ToString();
         if (error is "")
         {
             Guid transactionGuid = Guid.NewGuid();
-            string systemComment = $"{thisUserAccountVM!.Name}({thisUserAccountVM.Guid}) sent {amount} to {otherUserAccount!.FriendlyName}({otherUserAccount.Key})";
+            string systemComment = $"{thisUserAccountVM!.Name}({thisUserAccountVM.Guid}) made a transaction to {otherUserAccount!.FriendlyName}({otherUserAccount.Key})";
             Transaction transactionSender = new()
             {
                 UserAccountId = thisUserAccountVM.Id,

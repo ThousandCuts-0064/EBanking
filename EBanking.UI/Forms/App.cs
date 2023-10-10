@@ -4,7 +4,7 @@ namespace EBanking.UI.Forms;
 
 public partial class App : Form
 {
-    private IEbankingDbContext _dbContext = null!;
+    private IEbankingDbContext? _dbContext = null;
     private int _formCount;
     public static App Instance { get; } = new();
 
@@ -34,7 +34,8 @@ public partial class App : Form
 
     public class Form : System.Windows.Forms.Form
     {
-        protected override void OnLoad(EventArgs e) => Instance.OnFormLoaded(); // If this is in the constructor the designer will break
+        // If the counting is in the constructor the designer will break
+        protected override void OnLoad(EventArgs e) => Instance.OnFormLoaded();
 
         protected override void OnClosed(EventArgs e) => Instance.OnFormClosed();
     }

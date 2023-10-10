@@ -1,6 +1,5 @@
 ﻿using EBanking.Data.Entities;
 using EBanking.Data.Interfaces;
-using EBanking.UI.Wrappers;
 
 namespace EBanking.UI.Forms;
 public partial class UserForm : App.Form
@@ -31,7 +30,7 @@ public partial class UserForm : App.Form
 
     private void BtnMakeTransaction_Click(object sender, EventArgs e)
     {
-        new MakeTransaction(_dbContext, _user).ShowDialog();
+        new TransactionForm(_dbContext, _user).ShowDialog();
         LoadAccounts();
     }
 
@@ -43,17 +42,15 @@ public partial class UserForm : App.Form
     private void BtnCreateAccount_Click(object sender, EventArgs e)
     {
         CreateAccount createAccount = new(_dbContext, _user.Id);
-        createAccount.UserAccountCreated += userAccount =>
-        {
-            _lbxAccounts.Items.Add(new UserAccountWrap(userAccount));
-            _lbxAccounts.Refresh();
-        };
+        createAccount.UserAccountCreated += _ => LoadAccounts();
         createAccount.ShowDialog();
     }
 
-    private void LoadAccounts() =>
-        _lbxAccounts.DataSource = _dbContext.UserAccounts.All
-            .Where(uc => uc.UserId == _user.Id)
-            .Select(uc => new UserAccountWrap(uc))
-            .ToList();
+    private void LoadAccounts() => _dgvAccounts.DataSource =
+        _dbContext.UserAccounts.All
+        .Where(ua => ua.UserId == _user.Id)
+        .Select(ua => new UserAccountRecord(ua.FriendlyName, ua.Balance, ua.Key))
+        .ToList();
+
+    private record UserAccountRecord(string Name, decimal Amount, Guid Key);
 }

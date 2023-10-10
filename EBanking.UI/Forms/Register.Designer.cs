@@ -37,48 +37,48 @@ partial class Register
         _tbEmail = new TextBox();
         _tbName = new TextBox();
         _lblName = new Label();
+        _lblRepeatPassword = new Label();
+        _tbRepeatPassword = new TextBox();
         SuspendLayout();
         // 
         // _lblUserName
         // 
         _lblUserName.AutoSize = true;
-        _lblUserName.Location = new Point(10, 11);
+        _lblUserName.Location = new Point(11, 15);
         _lblUserName.Name = "_lblUserName";
-        _lblUserName.Size = new Size(60, 15);
+        _lblUserName.Size = new Size(75, 20);
         _lblUserName.TabIndex = 0;
         _lblUserName.Text = "Username";
         // 
         // _lblPassword
         // 
         _lblPassword.AutoSize = true;
-        _lblPassword.Location = new Point(10, 36);
+        _lblPassword.Location = new Point(11, 48);
         _lblPassword.Name = "_lblPassword";
-        _lblPassword.Size = new Size(57, 15);
+        _lblPassword.Size = new Size(70, 20);
         _lblPassword.TabIndex = 1;
         _lblPassword.Text = "Password";
         // 
         // _tbUsername
         // 
-        _tbUsername.Location = new Point(81, 9);
-        _tbUsername.Margin = new Padding(3, 2, 3, 2);
+        _tbUsername.Location = new Point(138, 12);
         _tbUsername.Name = "_tbUsername";
-        _tbUsername.Size = new Size(147, 23);
+        _tbUsername.Size = new Size(167, 27);
         _tbUsername.TabIndex = 2;
         // 
         // _tbPassword
         // 
-        _tbPassword.Location = new Point(81, 34);
-        _tbPassword.Margin = new Padding(3, 2, 3, 2);
+        _tbPassword.Location = new Point(138, 45);
         _tbPassword.Name = "_tbPassword";
-        _tbPassword.Size = new Size(147, 23);
+        _tbPassword.PasswordChar = '*';
+        _tbPassword.Size = new Size(167, 27);
         _tbPassword.TabIndex = 3;
         // 
         // _btnRegister
         // 
-        _btnRegister.Location = new Point(10, 108);
-        _btnRegister.Margin = new Padding(3, 2, 3, 2);
+        _btnRegister.Location = new Point(12, 177);
         _btnRegister.Name = "_btnRegister";
-        _btnRegister.Size = new Size(218, 31);
+        _btnRegister.Size = new Size(294, 41);
         _btnRegister.TabIndex = 4;
         _btnRegister.Text = "Register";
         _btnRegister.UseVisualStyleBackColor = true;
@@ -87,42 +87,59 @@ partial class Register
         // _lblEmail
         // 
         _lblEmail.AutoSize = true;
-        _lblEmail.Location = new Point(10, 86);
+        _lblEmail.Location = new Point(11, 144);
         _lblEmail.Name = "_lblEmail";
-        _lblEmail.Size = new Size(36, 15);
+        _lblEmail.Size = new Size(46, 20);
         _lblEmail.TabIndex = 6;
         _lblEmail.Text = "Email";
         // 
         // _tbEmail
         // 
-        _tbEmail.Location = new Point(81, 83);
-        _tbEmail.Margin = new Padding(3, 2, 3, 2);
+        _tbEmail.Location = new Point(138, 144);
         _tbEmail.Name = "_tbEmail";
-        _tbEmail.Size = new Size(147, 23);
+        _tbEmail.Size = new Size(167, 27);
         _tbEmail.TabIndex = 7;
         // 
         // _tbName
         // 
-        _tbName.Location = new Point(81, 58);
-        _tbName.Margin = new Padding(3, 2, 3, 2);
+        _tbName.Location = new Point(138, 111);
         _tbName.Name = "_tbName";
-        _tbName.Size = new Size(147, 23);
+        _tbName.Size = new Size(167, 27);
         _tbName.TabIndex = 8;
         // 
         // _lblName
         // 
         _lblName.AutoSize = true;
-        _lblName.Location = new Point(10, 61);
+        _lblName.Location = new Point(11, 114);
         _lblName.Name = "_lblName";
-        _lblName.Size = new Size(39, 15);
+        _lblName.Size = new Size(49, 20);
         _lblName.TabIndex = 9;
         _lblName.Text = "Name";
         // 
+        // _lblRepeatPassword
+        // 
+        _lblRepeatPassword.AutoSize = true;
+        _lblRepeatPassword.Location = new Point(11, 81);
+        _lblRepeatPassword.Name = "_lblRepeatPassword";
+        _lblRepeatPassword.Size = new Size(121, 20);
+        _lblRepeatPassword.TabIndex = 10;
+        _lblRepeatPassword.Text = "Repeat Password";
+        // 
+        // _tbRepeatPassword
+        // 
+        _tbRepeatPassword.Location = new Point(138, 78);
+        _tbRepeatPassword.Name = "_tbRepeatPassword";
+        _tbRepeatPassword.PasswordChar = '*';
+        _tbRepeatPassword.Size = new Size(167, 27);
+        _tbRepeatPassword.TabIndex = 11;
+        // 
         // Register
         // 
-        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(247, 148);
+        ClientSize = new Size(318, 231);
+        Controls.Add(_tbRepeatPassword);
+        Controls.Add(_lblRepeatPassword);
         Controls.Add(_lblName);
         Controls.Add(_tbName);
         Controls.Add(_tbEmail);
@@ -132,9 +149,9 @@ partial class Register
         Controls.Add(_tbUsername);
         Controls.Add(_lblPassword);
         Controls.Add(_lblUserName);
-        FormBorderStyle = FormBorderStyle.FixedSingle;
-        Margin = new Padding(3, 2, 3, 2);
+        FormBorderStyle = FormBorderStyle.FixedToolWindow;
         Name = "Register";
+        StartPosition = FormStartPosition.CenterScreen;
         Text = "Register";
         ResumeLayout(false);
         PerformLayout();
@@ -151,4 +168,6 @@ partial class Register
     private TextBox _tbEmail;
     private TextBox _tbName;
     private Label _lblName;
+    private Label _lblRepeatPassword;
+    private TextBox _tbRepeatPassword;
 }

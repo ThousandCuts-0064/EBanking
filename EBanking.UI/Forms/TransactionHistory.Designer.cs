@@ -28,35 +28,48 @@ partial class TransactionHistory
     /// </summary>
     private void InitializeComponent()
     {
-        _tlpTransactions = new TableLayoutPanel();
+        _dgvMain = new DataGridView();
+        ((System.ComponentModel.ISupportInitialize)_dgvMain).BeginInit();
         SuspendLayout();
         // 
-        // _tlpTransactions
+        // _dgvMain
         // 
-        _tlpTransactions.ColumnCount = 1;
-        _tlpTransactions.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 41.2935333F));
-        _tlpTransactions.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 58.7064667F));
-        _tlpTransactions.Dock = DockStyle.Fill;
-        _tlpTransactions.Location = new Point(0, 0);
-        _tlpTransactions.Name = "_tlpTransactions";
-        _tlpTransactions.RowCount = 2;
-        _tlpTransactions.RowStyles.Add(new RowStyle(SizeType.Percent, 50.22222F));
-        _tlpTransactions.RowStyles.Add(new RowStyle(SizeType.Percent, 49.77778F));
-        _tlpTransactions.Size = new Size(384, 361);
-        _tlpTransactions.TabIndex = 1;
+        _dgvMain.AllowUserToAddRows = false;
+        _dgvMain.AllowUserToDeleteRows = false;
+        _dgvMain.AllowUserToResizeRows = false;
+        _dgvMain.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        _dgvMain.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+        _dgvMain.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+        _dgvMain.Dock = DockStyle.Fill;
+        _dgvMain.Location = new Point(0, 0);
+        _dgvMain.MultiSelect = false;
+        _dgvMain.Name = "_dgvMain";
+        _dgvMain.ReadOnly = true;
+        _dgvMain.RowHeadersVisible = false;
+        _dgvMain.RowHeadersWidth = 51;
+        _dgvMain.RowTemplate.Height = 29;
+        _dgvMain.RowTemplate.ReadOnly = true;
+        _dgvMain.RowTemplate.Resizable = DataGridViewTriState.False;
+        _dgvMain.SelectionMode = DataGridViewSelectionMode.CellSelect;
+        _dgvMain.Size = new Size(563, 308);
+        _dgvMain.TabIndex = 0;
+        _dgvMain.VirtualMode = true;
         // 
         // TransactionHistory
         // 
-        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(384, 361);
-        Controls.Add(_tlpTransactions);
-        FormBorderStyle = FormBorderStyle.FixedToolWindow;
+        ClientSize = new Size(563, 308);
+        Controls.Add(_dgvMain);
+        Margin = new Padding(3, 4, 3, 4);
         Name = "TransactionHistory";
-        Text = "Username";
+        StartPosition = FormStartPosition.CenterScreen;
+        Text = "Transaction History";
+        ((System.ComponentModel.ISupportInitialize)_dgvMain).EndInit();
         ResumeLayout(false);
     }
 
     #endregion
-    private TableLayoutPanel _tlpTransactions;
+
+    private DataGridView _dgvMain;
 }
