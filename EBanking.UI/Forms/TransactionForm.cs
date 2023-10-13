@@ -2,13 +2,13 @@
 using EBanking.Data.Core;
 using EBanking.Data.Entities;
 using EBanking.Data.Interfaces;
-using EBanking.UI.Wrappers;
+using EBanking.UI.ViewModels;
 
 namespace EBanking.UI.Forms;
 
 public partial class TransactionForm : Form
 {
-    private readonly UserAccountWrap[] _userAccountWrappers;
+    private readonly UserAccountVM[] _userAccountVMs;
     private readonly IEbankingDbContext _dbContext;
     private readonly User _user;
 
@@ -17,23 +17,22 @@ public partial class TransactionForm : Form
         InitializeComponent();
         _dbContext = dbContext;
         _user = user;
-        Text = $"{_user.FullName}: Transaction";
-        _userAccountWrappers = _dbContext.UserAccounts.All
+        _userAccountVMs = _dbContext.UserAccounts.All
             .Where(ua => ua.UserId == _user.Id)
-            .Select(ua => new UserAccountWrap(ua))
+            .Select(ua => new UserAccountVM(ua))
             .ToArray();
-        _lbxAccounts.Items.AddRange(_userAccountWrappers);
+        _lbxAccounts.Items.AddRange(_userAccountVMs);
     }
 
     private void BtnConfirm_Click(object sender, EventArgs e)
     {
-        StringBuilder sb = new();
-        UserAccountWrap? thisUserAccountVM = null;
+        var sb = new StringBuilder();
+        UserAccountVM? thisUserAccountVM = null;
 
         if (_lbxAccounts.SelectedIndex == -1)
             sb.AppendLine("Please select an account form the list");
         else
-            thisUserAccountVM = _userAccountWrappers[_lbxAccounts.SelectedIndex];
+            thisUserAccountVM = _userAccountVMs[_lbxAccounts.SelectedIndex];
 
         if (_tbKey.Text is "")
             sb.AppendLine("Please enter the Guid of the other account");
@@ -41,7 +40,7 @@ public partial class TransactionForm : Form
         if (_tbAmount.Text is "")
             sb.AppendLine("Please enter the amount for the transaction");
 
-        if (!decimal.TryParse(_tbAmount.Text, out decimal amount)
+        if (!decimal.TryParse(_tbAmount.Text, out var amount)
             || amount < 0
             || amount % 0.01m > 0)
         {
@@ -51,15 +50,15 @@ public partial class TransactionForm : Form
 
         UserAccount? otherUserAccount = null;
 
-        if (!Guid.TryParse(_tbKey.Text, out Guid guid))
+        if (!Guid.TryParse(_tbKey.Text, out var guid))
             sb.AppendLine("Invalid Guid");
 
-        else if (guid.Equals(thisUserAccountVM?.Guid))
+        else if (guid.Equals(thisUserAccountVM?.Key))
             sb.AppendLine("Please enter a Guid of another account");
 
         else
         {
-            if (thisUserAccountVM!.Balance - amount < 0)
+            if (thisUserAccountVM?.Balance - amount < 0)
                 sb.AppendLine("Insufficient amount");
 
             otherUserAccount = _dbContext.UserAccounts.All.FirstOrDefault(ua => ua.Key.Equals(guid));
@@ -67,32 +66,32 @@ public partial class TransactionForm : Form
                 sb.AppendLine("Account with this Guid was not found");
         }
 
-        string error = sb.ToString();
+        var error = sb.ToString();
         if (error is "")
         {
-            Guid transactionGuid = Guid.NewGuid();
-            string systemComment = $"{thisUserAccountVM!.Name}({thisUserAccountVM.Guid}) made a transaction to {otherUserAccount!.FriendlyName}({otherUserAccount.Key})";
-            Transaction transactionSender = new()
+            var transactionGuid = Guid.NewGuid();
+            var systemComment = $"{thisUserAccountVM!.FriendlyName}({thisUserAccountVM.Key}) made a transaction to {otherUserAccount!.FriendlyName}({otherUserAccount.Key})";
+            var transactionSender = new Transaction()
             {
                 UserAccountId = thisUserAccountVM.Id,
-                Key = transactionGuid,
-                Type = TransactionType.Credit,
-                Amount = amount,
-                EventDate = DateTime.Now,
-                SystemComment = systemComment
-            };
-            Transaction transactionReciever = new()
-            {
-                UserAccountId = otherUserAccount.Id,
                 Key = transactionGuid,
                 Type = TransactionType.Debit,
                 Amount = amount,
                 EventDate = DateTime.Now,
                 SystemComment = systemComment
             };
+            var transactionReciever = new Transaction()
+            {
+                UserAccountId = otherUserAccount.Id,
+                Key = transactionGuid,
+                Type = TransactionType.Credit,
+                Amount = amount,
+                EventDate = DateTime.Now,
+                SystemComment = systemComment
+            };
             thisUserAccountVM.UserAccount.Balance -= amount;
             otherUserAccount.Balance += amount;
-            using (DbTransaction dbTransaction = _dbContext.StartDbTransaction())
+            using (var dbTransaction = _dbContext.StartDbTransaction())
             {
                 _dbContext.UserAccounts.Update(thisUserAccountVM.UserAccount);
                 _dbContext.UserAccounts.Update(otherUserAccount);

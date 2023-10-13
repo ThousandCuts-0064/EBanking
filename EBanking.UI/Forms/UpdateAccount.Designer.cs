@@ -55,7 +55,7 @@ partial class UpdateAccount
         // 
         // _btnConfirm
         // 
-        _btnConfirm.Location = new Point(215, 55);
+        _btnConfirm.Location = new Point(215, 52);
         _btnConfirm.Margin = new Padding(3, 4, 3, 4);
         _btnConfirm.Name = "_btnConfirm";
         _btnConfirm.Size = new Size(210, 68);

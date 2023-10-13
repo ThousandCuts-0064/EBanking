@@ -15,7 +15,8 @@ internal static class Program
         // To customize application configuration such as set high DPI settings or default font,
         // see https://aka.ms/applicationconfiguration.
         ApplicationConfiguration.Initialize();
-        App.Initialize(new EBankingDbContext(ConfigurationManager.ConnectionStrings["Database"].ConnectionString));
-        Application.Run(App.Instance);
+        Application.Run(
+            new EBankingContext(
+                new EBankingDbContext(ConfigurationManager.ConnectionStrings["Database"].ConnectionString)));
     }
 }

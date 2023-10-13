@@ -39,7 +39,7 @@ public partial class CreateAccount : Form
         }
         else
         {
-            UserAccount userAccount = new()
+            var userAccount = new UserAccount()
             {
                 FriendlyName = _tbName.Text,
                 UserId = _userId,

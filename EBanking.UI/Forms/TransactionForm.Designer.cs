@@ -64,7 +64,7 @@ partial class TransactionForm
         // 
         // _btnConfirm
         // 
-        _btnConfirm.Location = new Point(215, 93);
+        _btnConfirm.Location = new Point(215, 92);
         _btnConfirm.Margin = new Padding(3, 4, 3, 4);
         _btnConfirm.Name = "_btnConfirm";
         _btnConfirm.Size = new Size(210, 68);
@@ -91,7 +91,7 @@ partial class TransactionForm
         _lblAmount.TabIndex = 5;
         _lblAmount.Text = "Amount";
         // 
-        // MakeTransaction
+        // TransactionForm
         // 
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
@@ -104,7 +104,8 @@ partial class TransactionForm
         Controls.Add(_lbxAccounts);
         FormBorderStyle = FormBorderStyle.FixedToolWindow;
         Margin = new Padding(3, 4, 3, 4);
-        Name = "MakeTransaction";
+        Name = "TransactionForm";
+        StartPosition = FormStartPosition.CenterScreen;
         Text = "Transaction";
         ResumeLayout(false);
         PerformLayout();

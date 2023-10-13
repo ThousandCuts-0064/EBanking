@@ -1,11 +1,14 @@
-﻿using EBanking.Data.Entities;
+﻿using System.Text;
+using EBanking.Data.Entities;
 using EBanking.Data.Interfaces;
 
 namespace EBanking.UI.Forms;
 
-public partial class Login : App.Form
+public partial class Login : Form
 {
     private readonly IEbankingDbContext _dbContext;
+    public User? AuthenticatedUser { get; private set; }
+    public bool DoOpenRegister { get; private set; }
 
     public Login(IEbankingDbContext dbContext)
     {
@@ -15,18 +18,19 @@ public partial class Login : App.Form
 
     private void BtnRegister_Click(object sender, EventArgs e)
     {
-        new Register(_dbContext).Show();
+        DoOpenRegister = true;
         Close();
     }
 
     private void BtnLogin_Click(object sender, EventArgs e)
     {
-        User match = new()
+        var match = new User()
         {
             Username = _tbUsername.Text,
             Password = Encryption.SHA512(_tbPassword.Text)
         };
-        User? user = _dbContext.Users.All.FirstOrDefault(u => Comparers.UserLogin.Equals(match, u));
+        var user = _dbContext.Users.All
+            .FirstOrDefault(u => Comparers.UserLogin.Equals(match, u));
 
         if (user is null)
         {
@@ -38,7 +42,7 @@ public partial class Login : App.Form
         }
         else
         {
-            new UserForm(_dbContext, user).Show();
+            AuthenticatedUser = user;
             Close();
         }
     }

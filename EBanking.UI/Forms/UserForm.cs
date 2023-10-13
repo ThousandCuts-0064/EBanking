@@ -2,7 +2,7 @@
 using EBanking.Data.Interfaces;
 
 namespace EBanking.UI.Forms;
-public partial class UserForm : App.Form
+public partial class UserForm : Form
 {
     private readonly IEbankingDbContext _dbContext;
     private readonly User _user;
@@ -13,7 +13,7 @@ public partial class UserForm : App.Form
         _user = user;
         _dbContext = dbContext;
         Text = _user.FullName;
-        LoadAccounts();
+        //LoadAccounts();
     }
 
     private void BtnDeposit_Click(object sender, EventArgs e)
@@ -41,7 +41,7 @@ public partial class UserForm : App.Form
 
     private void BtnCreateAccount_Click(object sender, EventArgs e)
     {
-        CreateAccount createAccount = new(_dbContext, _user.Id);
+        var createAccount = new CreateAccount(_dbContext, _user.Id);
         createAccount.UserAccountCreated += _ => LoadAccounts();
         createAccount.ShowDialog();
     }
@@ -49,8 +49,13 @@ public partial class UserForm : App.Form
     private void LoadAccounts() => _dgvAccounts.DataSource =
         _dbContext.UserAccounts.All
         .Where(ua => ua.UserId == _user.Id)
-        .Select(ua => new UserAccountRecord(ua.FriendlyName, ua.Balance, ua.Key))
+        .Select(ua => new
+        {
+            Name = ua.FriendlyName, 
+            Balance = ua.Balance.ToString("0.00"), 
+            ua.Key
+        })
         .ToList();
 
-    private record UserAccountRecord(string Name, decimal Amount, Guid Key);
+    private record UserAccountRecord(string Name, string Amount, Guid Key);
 }

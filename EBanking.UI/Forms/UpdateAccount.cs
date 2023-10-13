@@ -1,15 +1,16 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Text;
 using EBanking.Data.Core;
 using EBanking.Data.Entities;
 using EBanking.Data.Interfaces;
-using EBanking.UI.Wrappers;
+using EBanking.UI.ViewModels;
 
 namespace EBanking.UI.Forms;
 
 public partial class UpdateAccount : Form
 {
-    private readonly UserAccountWrap[] _userAccountWrappers;
+    private readonly UserAccountVM[] _userAccountVMs;
     private readonly IEbankingDbContext _dbContext;
     private readonly User _user;
     private readonly UpdateAccountOption _option;
@@ -23,29 +24,29 @@ public partial class UpdateAccount : Form
             ? option
             : throw new InvalidEnumArgumentException(nameof(option), (int)option, typeof(UpdateAccountOption));
         Text = _option.ToString();
-        _userAccountWrappers = _dbContext.UserAccounts.All
+        _userAccountVMs = _dbContext.UserAccounts.All
             .Where(ua => ua.UserId == _user.Id)
-            .Select(ua => new UserAccountWrap(ua))
+            .Select(ua => new UserAccountVM(ua))
             .ToArray();
-        _lbxAccounts.Items.AddRange(_userAccountWrappers);
+        _lbxAccounts.Items.AddRange(_userAccountVMs);
     }
 
     private void BtnConfirm_Click(object sender, EventArgs e)
     {
-        StringBuilder sb = new();
-        UserAccountWrap? userAccountVM = null;
+        var sb = new StringBuilder();
+        UserAccountVM? userAccountVM = null;
         Transaction? transactionTax = null;
         TransactionType type = 0;
-        Guid guid = Guid.Empty;
-        string comment = null!;
-        int sign = 0;
+        var key = Guid.Empty;
+        string? comment = null;
+        var sign = 0;
 
         if (_lbxAccounts.SelectedIndex == -1)
             sb.AppendLine("Please select an account form the list");
         else
-            userAccountVM = _userAccountWrappers[_lbxAccounts.SelectedIndex];
+            userAccountVM = _userAccountVMs[_lbxAccounts.SelectedIndex];
 
-        if (!decimal.TryParse(_tbAmount.Text, out decimal amount)
+        if (!decimal.TryParse(_tbAmount.Text, out var amount)
            || amount < 0
            || amount % 0.01m > 0)
         {
@@ -57,48 +58,50 @@ public partial class UpdateAccount : Form
             if (_option == UpdateAccountOption.Withdraw)
             {
                 sign = -1;
-                decimal tax = Math.Max(amount * 0.001m, 0.10m);
+                var tax = Math.Max(
+                    Math.Round(amount * 0.001m, 2, MidpointRounding.AwayFromZero),
+                    0.10m);
                 if (userAccountVM.Balance - amount - tax < 0)
                     sb.AppendLine("Insufficient amount");
 
-                guid = Guid.NewGuid();
+                key = Guid.NewGuid();
                 transactionTax = new()
                 {
                     UserAccountId = userAccountVM!.Id,
-                    Key = guid,
-                    Type = TransactionType.Credit,
+                    Key = key,
+                    Type = TransactionType.Debit,
                     Amount = tax,
                     EventDate = DateTime.Now,
-                    SystemComment = $"Tax for withdrawing from {userAccountVM.Name}({userAccountVM.Guid})"
+                    SystemComment = $"Tax for withdrawing from {userAccountVM.FriendlyName}({userAccountVM.Key})"
                 };
-                userAccountVM!.UserAccount.Balance -= tax;
+                userAccountVM.UserAccount.Balance -= tax;
 
-                type = TransactionType.Credit;
-                comment = $"Withdraw from {userAccountVM.Name}({userAccountVM.Guid})";
+                type = TransactionType.Debit;
+                comment = $"Withdraw from {userAccountVM.FriendlyName}({userAccountVM.Key})";
             }
             else
             {
                 sign = 1;
-                type = TransactionType.Debit;
-                comment = $"Deposit to {userAccountVM.Name}({userAccountVM.Guid})";
+                type = TransactionType.Credit;
+                comment = $"Deposit to {userAccountVM.FriendlyName}({userAccountVM.Key})";
             }
         }
 
-        string error = sb.ToString();
+        var error = sb.ToString();
 
         if (error is "")
         {
-            Transaction transaction = new()
+            var transaction = new Transaction()
             {
                 UserAccountId = userAccountVM!.Id,
-                Key = guid.Equals(Guid.Empty) ? Guid.NewGuid() : guid,
+                Key = key.Equals(Guid.Empty) ? Guid.NewGuid() : key,
                 Type = type,
                 Amount = amount,
                 EventDate = DateTime.Now,
-                SystemComment = comment
+                SystemComment = comment ?? throw new UnreachableException()
             };
-            userAccountVM!.UserAccount.Balance += sign * amount;
-            using (DbTransaction dbTransaction = _dbContext.StartDbTransaction())
+            userAccountVM.UserAccount.Balance += sign * amount;
+            using (var dbTransaction = _dbContext.StartDbTransaction())
             {
                 _dbContext.UserAccounts.Update(userAccountVM.UserAccount);
                 _dbContext.Transactions.Insert(transaction);

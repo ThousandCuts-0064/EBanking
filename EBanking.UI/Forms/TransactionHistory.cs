@@ -19,9 +19,13 @@ public partial class TransactionHistory : Form
             .ToDictionary(ua => ua.Id, ua => ua.FriendlyName);
         _dgvMain.DataSource = _dbContext.Transactions.All
             .Where(t => userAccounts.ContainsKey(t.UserAccountId))
-            .Select(t => new TransactionRecord(userAccounts[t.UserAccountId], t.Type, t.Amount, t.EventDate))
+            .Select(t => new
+            {
+                Account = userAccounts[t.UserAccountId],
+                t.Type,
+                Amount = t.Amount.ToString("0.00"),
+                Date = t.EventDate
+            })
             .ToList();
     }
-
-    private record TransactionRecord(string Account, TransactionType Type, decimal Amount, DateTime Date);
 }

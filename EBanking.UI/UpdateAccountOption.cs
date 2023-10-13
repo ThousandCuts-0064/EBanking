@@ -2,6 +2,6 @@
 
 public enum UpdateAccountOption
 {
-    Deposit,
+    Deposit = 1,
     Withdraw
 }

@@ -51,7 +51,7 @@ partial class Login
         _lblPassword.Location = new Point(11, 48);
         _lblPassword.Name = "_lblPassword";
         _lblPassword.Size = new Size(70, 20);
-        _lblPassword.TabIndex = 1;
+        _lblPassword.TabIndex = 0;
         _lblPassword.Text = "Password";
         // 
         // _tbUsername
@@ -59,7 +59,7 @@ partial class Login
         _tbUsername.Location = new Point(96, 12);
         _tbUsername.Name = "_tbUsername";
         _tbUsername.Size = new Size(164, 27);
-        _tbUsername.TabIndex = 2;
+        _tbUsername.TabIndex = 0;
         // 
         // _tbPassword
         // 
@@ -67,14 +67,14 @@ partial class Login
         _tbPassword.Name = "_tbPassword";
         _tbPassword.PasswordChar = '*';
         _tbPassword.Size = new Size(164, 27);
-        _tbPassword.TabIndex = 3;
+        _tbPassword.TabIndex = 1;
         // 
         // _btnRegister
         // 
         _btnRegister.Location = new Point(11, 81);
         _btnRegister.Name = "_btnRegister";
         _btnRegister.Size = new Size(121, 41);
-        _btnRegister.TabIndex = 4;
+        _btnRegister.TabIndex = 3;
         _btnRegister.Text = "Register";
         _btnRegister.UseVisualStyleBackColor = true;
         _btnRegister.Click += BtnRegister_Click;
@@ -84,7 +84,7 @@ partial class Login
         _btnLogin.Location = new Point(139, 81);
         _btnLogin.Name = "_btnLogin";
         _btnLogin.Size = new Size(121, 41);
-        _btnLogin.TabIndex = 5;
+        _btnLogin.TabIndex = 2;
         _btnLogin.Text = "Login";
         _btnLogin.UseVisualStyleBackColor = true;
         _btnLogin.Click += BtnLogin_Click;

@@ -5,9 +5,10 @@ using EBanking.Data.Interfaces;
 
 namespace EBanking.UI.Forms;
 
-public partial class Register : App.Form
+public partial class Register : Form
 {
     private readonly IEbankingDbContext _dbContext;
+    public User? AuthenticatedUser { get; private set; }
 
     public Register(IEbankingDbContext dbContext)
     {
@@ -17,9 +18,9 @@ public partial class Register : App.Form
 
     private void BtnRegister_Click(object sender, EventArgs e)
     {
-        StringBuilder sb = new();
+        var sb = new StringBuilder();
 
-        User user = new()
+        var user = new User()
         {
             Username = _tbUsername.Text,
             Password = Encryption.SHA512(_tbPassword.Text),
@@ -44,8 +45,8 @@ public partial class Register : App.Form
         if (_dbContext.Users.All.Contains(user, Comparers.UserRegister))
             sb.AppendLine("Username is already taken");
 
-        bool hasLetter = false;
-        bool hasDigit = false;
+        var hasLetter = false;
+        var hasDigit = false;
         foreach (var symbol in _tbPassword.Text)
         {
             if (char.IsDigit(symbol))
@@ -67,12 +68,12 @@ public partial class Register : App.Form
         if (!MailAddress.TryCreate(user.Email, out _))
             sb.AppendLine("Invalid email format");
 
-        string error = sb.ToString();
+        var error = sb.ToString();
 
         if (error is "")
         {
             _dbContext.Users.Insert(user);
-            new UserForm(_dbContext, user).Show();
+            AuthenticatedUser = user;
             Close();
         }
         else
