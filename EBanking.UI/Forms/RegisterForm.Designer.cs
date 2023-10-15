@@ -1,6 +1,6 @@
 ﻿namespace EBanking.UI.Forms;
 
-partial class Register
+partial class RegisterForm
 {
     /// <summary>
     /// Required designer variable.
@@ -35,7 +35,7 @@ partial class Register
         _btnRegister = new Button();
         _lblEmail = new Label();
         _tbEmail = new TextBox();
-        _tbName = new TextBox();
+        _tbFullName = new TextBox();
         _lblName = new Label();
         _lblRepeatPassword = new Label();
         _tbRepeatPassword = new TextBox();
@@ -102,10 +102,10 @@ partial class Register
         // 
         // _tbName
         // 
-        _tbName.Location = new Point(138, 111);
-        _tbName.Name = "_tbName";
-        _tbName.Size = new Size(167, 27);
-        _tbName.TabIndex = 3;
+        _tbFullName.Location = new Point(138, 111);
+        _tbFullName.Name = "_tbName";
+        _tbFullName.Size = new Size(167, 27);
+        _tbFullName.TabIndex = 3;
         // 
         // _lblName
         // 
@@ -141,7 +141,7 @@ partial class Register
         Controls.Add(_tbRepeatPassword);
         Controls.Add(_lblRepeatPassword);
         Controls.Add(_lblName);
-        Controls.Add(_tbName);
+        Controls.Add(_tbFullName);
         Controls.Add(_tbEmail);
         Controls.Add(_lblEmail);
         Controls.Add(_btnRegister);
@@ -166,7 +166,7 @@ partial class Register
     private Button _btnRegister;
     private Label _lblEmail;
     private TextBox _tbEmail;
-    private TextBox _tbName;
+    private TextBox _tbFullName;
     private Label _lblName;
     private Label _lblRepeatPassword;
     private TextBox _tbRepeatPassword;

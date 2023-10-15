@@ -1,6 +1,6 @@
 ﻿namespace EBanking.UI.Forms;
 
-partial class UpdateAccount
+partial class AlterAccountBalanceForm
 {
     /// <summary>
     /// Required designer variable.

@@ -1,30 +1,32 @@
 ﻿using EBanking.Data.Entities;
 using EBanking.Data.Interfaces;
+using EBanking.Logic.Models;
+using EBanking.Logic.Services;
 
 namespace EBanking.UI.Forms;
 public partial class UserForm : Form
 {
-    private readonly IEbankingDbContext _dbContext;
-    private readonly User _user;
+    private readonly ITransactionService _transactionService;
+    private readonly IUserModel _user;
 
-    public UserForm(IEbankingDbContext dbContext, User user)
+    public UserForm(ITransactionService transactionService, IUserModel user)
     {
         InitializeComponent();
+        _transactionService = transactionService;
         _user = user;
-        _dbContext = dbContext;
         Text = _user.FullName;
-        //LoadAccounts();
+        LoadAccounts();
     }
 
     private void BtnDeposit_Click(object sender, EventArgs e)
     {
-        new UpdateAccount(_dbContext, _user, UpdateAccountOption.Deposit).ShowDialog();
+        new AlterAccountBalanceForm(_transactionService, _user, TransactionType.Credit).ShowDialog();
         LoadAccounts();
     }
 
     private void BtnWithdraw_Click(object sender, EventArgs e)
     {
-        new UpdateAccount(_dbContext, _user, UpdateAccountOption.Withdraw).ShowDialog();
+        new AlterAccountBalanceForm(_transactionService, _user, TransactionType.Debit).ShowDialog();
         LoadAccounts();
     }
 
@@ -47,15 +49,12 @@ public partial class UserForm : Form
     }
 
     private void LoadAccounts() => _dgvAccounts.DataSource =
-        _dbContext.UserAccounts.All
-        .Where(ua => ua.UserId == _user.Id)
+        _user.UserAccounts
         .Select(ua => new
         {
-            Name = ua.FriendlyName, 
+            ua.Name, 
             Balance = ua.Balance.ToString("0.00"), 
             ua.Key
         })
         .ToList();
-
-    private record UserAccountRecord(string Name, string Amount, Guid Key);
 }

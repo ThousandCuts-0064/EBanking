@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using EBanking.Data.Core;
 using EBanking.Data.Entities;
 using EBanking.Data.Interfaces;
 using EBanking.UI.ViewModels;
@@ -8,7 +7,7 @@ namespace EBanking.UI.Forms;
 
 public partial class TransactionForm : Form
 {
-    private readonly UserAccountVM[] _userAccountVMs;
+    private readonly UserAccountViewModel[] _userAccountViewModels;
     private readonly IEbankingDbContext _dbContext;
     private readonly User _user;
 
@@ -17,22 +16,22 @@ public partial class TransactionForm : Form
         InitializeComponent();
         _dbContext = dbContext;
         _user = user;
-        _userAccountVMs = _dbContext.UserAccounts.All
+        _userAccountViewModels = _dbContext.UserAccounts.All
             .Where(ua => ua.UserId == _user.Id)
-            .Select(ua => new UserAccountVM(ua))
+            .Select(ua => new UserAccountViewModel(ua))
             .ToArray();
-        _lbxAccounts.Items.AddRange(_userAccountVMs);
+        _lbxAccounts.Items.AddRange(_userAccountViewModels);
     }
 
     private void BtnConfirm_Click(object sender, EventArgs e)
     {
         var sb = new StringBuilder();
-        UserAccountVM? thisUserAccountVM = null;
+        UserAccountViewModel? thisUserAccountVM = null;
 
         if (_lbxAccounts.SelectedIndex == -1)
             sb.AppendLine("Please select an account form the list");
         else
-            thisUserAccountVM = _userAccountVMs[_lbxAccounts.SelectedIndex];
+            thisUserAccountVM = _userAccountViewModels[_lbxAccounts.SelectedIndex];
 
         if (_tbKey.Text is "")
             sb.AppendLine("Please enter the Guid of the other account");
@@ -70,7 +69,7 @@ public partial class TransactionForm : Form
         if (error is "")
         {
             var transactionGuid = Guid.NewGuid();
-            var systemComment = $"{thisUserAccountVM!.FriendlyName}({thisUserAccountVM.Key}) made a transaction to {otherUserAccount!.FriendlyName}({otherUserAccount.Key})";
+            var systemComment = $"{thisUserAccountVM!.Name}({thisUserAccountVM.Key}) made a transaction to {otherUserAccount!.FriendlyName}({otherUserAccount.Key})";
             var transactionSender = new Transaction()
             {
                 UserAccountId = thisUserAccountVM.Id,

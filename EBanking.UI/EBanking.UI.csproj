@@ -9,11 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EBanking.Data\EBanking.Data.csproj" />
+    <ProjectReference Include="..\EBanking.Logic\EBanking.Logic.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Forms\Register.cs" />
+    <Compile Update="Forms\RegisterForm.cs" />
   </ItemGroup>
 
 </Project>

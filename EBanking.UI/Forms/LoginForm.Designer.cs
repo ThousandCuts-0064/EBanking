@@ -1,6 +1,6 @@
 ﻿namespace EBanking.UI.Forms;
 
-partial class Login
+partial class LoginForm
 {
     /// <summary>
     /// Required designer variable.
