@@ -1,18 +1,14 @@
 ﻿using EBanking.Data.Entities;
-using EBanking.Data.Interfaces;
-using EBanking.Logic.Models;
-using EBanking.Logic.Services;
+using EBanking.UI.ViewModels;
 
 namespace EBanking.UI.Forms;
-public partial class UserForm : Form
+internal partial class UserForm : Form
 {
-    private readonly ITransactionService _transactionService;
-    private readonly IUserModel _user;
+    private readonly UserViewModel _user;
 
-    public UserForm(ITransactionService transactionService, IUserModel user)
+    public UserForm(UserViewModel user)
     {
         InitializeComponent();
-        _transactionService = transactionService;
         _user = user;
         Text = _user.FullName;
         LoadAccounts();
@@ -20,30 +16,30 @@ public partial class UserForm : Form
 
     private void BtnDeposit_Click(object sender, EventArgs e)
     {
-        new AlterAccountBalanceForm(_transactionService, _user, TransactionType.Credit).ShowDialog();
+        new AlterAccountBalanceForm(_user, TransactionType.Credit).ShowDialog();
         LoadAccounts();
     }
 
     private void BtnWithdraw_Click(object sender, EventArgs e)
     {
-        new AlterAccountBalanceForm(_transactionService, _user, TransactionType.Debit).ShowDialog();
+        new AlterAccountBalanceForm(_user, TransactionType.Debit).ShowDialog();
         LoadAccounts();
     }
 
     private void BtnMakeTransaction_Click(object sender, EventArgs e)
     {
-        new TransactionForm(_dbContext, _user).ShowDialog();
+        new TransactionForm(_user).ShowDialog();
         LoadAccounts();
     }
 
     private void BtnTransactionHistory_Click(object sender, EventArgs e)
     {
-        new TransactionHistory(_dbContext, _user).ShowDialog();
+        new TransactionHistory(_user).ShowDialog();
     }
 
     private void BtnCreateAccount_Click(object sender, EventArgs e)
     {
-        var createAccount = new CreateAccount(_dbContext, _user.Id);
+        var createAccount = new CreateAccount(_user);
         createAccount.UserAccountCreated += _ => LoadAccounts();
         createAccount.ShowDialog();
     }
@@ -52,8 +48,8 @@ public partial class UserForm : Form
         _user.UserAccounts
         .Select(ua => new
         {
-            ua.Name, 
-            Balance = ua.Balance.ToString("0.00"), 
+            ua.Name,
+            Balance = ua.Balance.ToString("0.00"),
             ua.Key
         })
         .ToList();

@@ -1,20 +1,18 @@
-﻿using EBanking.Data.Entities;
-using EBanking.Data.Interfaces;
+﻿using EBanking.Logic.Models;
+using EBanking.UI.ViewModels;
 
 namespace EBanking.UI.Forms;
 
-public partial class CreateAccount : Form
+internal partial class CreateAccount : Form
 {
-    private readonly IEbankingDbContext _dbContext;
-    private readonly int _userId;
+    private readonly UserViewModel _user;
 
-    public event Action<UserAccount>? UserAccountCreated;
+    public event Action<IUserAccountModel>? UserAccountCreated;
 
-    public CreateAccount(IEbankingDbContext dbContext, int userId)
+    public CreateAccount(UserViewModel user)
     {
         InitializeComponent();
-        _dbContext = dbContext;
-        _userId = userId;
+        _user = user;
     }
 
     private void BtnOK_Click(object sender, EventArgs e)
@@ -26,29 +24,21 @@ public partial class CreateAccount : Form
                 "Invalid name",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
-        }
-        else if (_dbContext.UserAccounts.All
-            .Select(ua => ua.FriendlyName)
-            .Contains(_tbName.Text))
-        {
-            MessageBox.Show(
-                $"Account with name {_tbName.Text} already exists!",
-                "Invalid name",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
-        }
-        else
-        {
-            var userAccount = new UserAccount()
-            {
-                FriendlyName = _tbName.Text,
-                UserId = _userId,
-                Key = Guid.NewGuid(),
-            };
 
-            _dbContext.UserAccounts.Insert(userAccount);
-            UserAccountCreated?.Invoke(userAccount);
-            Close();
+            return;
         }
+
+        if (_user.TryCreateUserAccount(_tbName.Text, out var userAccount, out var errorName))
+        {
+            Close();
+            UserAccountCreated?.Invoke(userAccount);
+            return;
+        }
+
+        MessageBox.Show(
+            errorName,
+            "Invalid name",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Error);
     }
 }

@@ -1,14 +1,12 @@
-﻿using System.Net.Mail;
-using System.Text;
-using EBanking.Logic.Models;
-using EBanking.Logic.Services;
+﻿using EBanking.Logic.Services;
+using EBanking.UI.ViewModels;
 
 namespace EBanking.UI.Forms;
 
-public partial class RegisterForm : Form
+internal partial class RegisterForm : Form
 {
     private readonly IAuthenticator _authenticator;
-    public IUserModel? AuthenticatedUser { get; private set; }
+    public UserViewModel? AuthenticatedUser { get; private set; }
 
     public RegisterForm(IAuthenticator authenticator)
     {
@@ -18,38 +16,36 @@ public partial class RegisterForm : Form
 
     private void BtnRegister_Click(object sender, EventArgs e)
     {
-        var sb = new StringBuilder();
+        var errors = new List<string>();
 
-        if (!_authenticator.IsUsernameValid(_tbUsername.Text, out var errorUsername))
-            sb.AppendLine(errorUsername);
+        _authenticator.IsUsernameValid(_tbUsername.Text, errors);
 
         if (!_tbPassword.Text.Equals(_tbRepeatPassword.Text))
-            sb.AppendLine("Repeat password mismatch");
+            errors.Add("Repeat password mismatch");
 
-        if (!_authenticator.IsPasswordValid(_tbPassword.Text, out var errorPassword))
-            sb.AppendLine(errorPassword);
+        _authenticator.IsPasswordValid(_tbPassword.Text, errors);
 
         if (!_authenticator.IsEmailValid(_tbEmail.Text, out var errorEmail))
-            sb.AppendLine(errorEmail);
+            errors.Add(errorEmail);
 
-        if (sb.Length == 0)
-        {
-            if (_authenticator.TryRegister(
+        if (errors.Count == 0
+            && _authenticator.TryRegister(
                 _tbUsername.Text,
                 _tbPassword.Text,
                 _tbFullName.Text,
                 _tbEmail.Text,
                 out var user,
-                out var errorRegister))
-            {
-                AuthenticatedUser = user;
-                Close();
-                return;
-            }
-
-            sb.AppendLine(errorRegister);
+                errors))
+        {
+            AuthenticatedUser = new UserViewModel(user);
+            Close();
+            return;
         }
 
-        MessageBox.Show(sb.ToString(), "Invalid register", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        MessageBox.Show(
+            string.Join(Environment.NewLine, errors), 
+            "Invalid register", 
+            MessageBoxButtons.OK, 
+            MessageBoxIcon.Error);
     }
 }

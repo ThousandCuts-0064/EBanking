@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net.Mail;
-using System.Text;
 using System.Text.RegularExpressions;
 using EBanking.Data.Entities;
 using EBanking.Data.Interfaces;
@@ -8,25 +7,36 @@ using EBanking.Logic.Models;
 
 namespace EBanking.Logic.Services;
 
-internal partial class Authenticator : IAuthenticator
+public partial class Authenticator : IAuthenticator
 {
+    private readonly IEncryptionService _encryptionService;
+    private readonly ITransactionService _transactionService;
     private readonly IEbankingDbContext _dbContext;
-    public bool IsStrictEmailValidation { get; set; } = true;
+    public bool IsStrictEmailValidation { get; set; }
 
-    public Authenticator(IEbankingDbContext dbContext) => _dbContext = dbContext;
-
-    public bool IsUsernameValid(string username, [NotNullWhen(false)] out string? error)
+    public Authenticator(
+        IEncryptionService encryptionService, 
+        ITransactionService transactionService, 
+        IEbankingDbContext dbContext,
+        bool isStrictEmailValidation = true)
     {
-        error = null;
-        var sb = new StringBuilder();
+        _encryptionService = encryptionService;
+        _transactionService = transactionService;
+        _dbContext = dbContext;
+        IsStrictEmailValidation = isStrictEmailValidation;
+    }
+
+    public bool IsUsernameValid(string username, ICollection<string> errors)
+    {
+        var startCount = errors.Count;
 
         if (username.Length is < 4 or > 16)
-            sb.AppendLine("Username must contain between 4 and 16 symbols");
+            errors.Add("Username must contain between 4 and 16 symbols");
 
         foreach (var symbol in username)
-            if (char.IsAsciiLetterOrDigit(symbol))
+            if (!char.IsAsciiLetterOrDigit(symbol))
             {
-                sb.AppendLine("Username can only contain symbols: a-z A-Z 0-9");
+                errors.Add("Username can only contain symbols: a-z A-Z 0-9");
                 break;
             }
 
@@ -34,20 +44,15 @@ internal partial class Authenticator : IAuthenticator
             .Select(u => u.Username)
             .Contains(username))
         {
-            sb.AppendLine("Username is already taken");
+            errors.Add("Username is already taken");
         }
 
-        if (sb.Length == 0)
-            return true;
-
-        error = sb.ToString();
-        return false;
+        return startCount == errors.Count;
     }
 
-    public bool IsPasswordValid(string password, [NotNullWhen(false)] out string? error)
+    public bool IsPasswordValid(string password, ICollection<string> errors)
     {
-        error = null;
-        var sb = new StringBuilder();
+        var startCount = errors.Count;
 
         var hasLetter = false;
         var hasDigit = false;
@@ -61,19 +66,15 @@ internal partial class Authenticator : IAuthenticator
         }
 
         if (!hasLetter)
-            sb.AppendLine("Password must contain at least 1 letter");
+            errors.Add("Password must contain at least 1 letter");
 
         if (!hasDigit)
-            sb.AppendLine("Password must contain at least 1 digit");
+            errors.Add("Password must contain at least 1 digit");
 
         if (password.Length < 8)
-            sb.AppendLine("Password must be at least 8 symbols");
+            errors.Add("Password must be at least 8 symbols");
 
-        if (sb.Length == 0)
-            return true;
-
-        error = sb.ToString();
-        return false;
+        return startCount == errors.Count;
     }
 
     public bool IsEmailValid(string email, [NotNullWhen(false)] out string? error)
@@ -104,36 +105,32 @@ internal partial class Authenticator : IAuthenticator
         string fullName,
         string email,
         [NotNullWhen(true)] out IUserModel? user,
-        [NotNullWhen(false)] out string? error)
+        ICollection<string> errors)
     {
         user = null;
-        error = null;
-        var sb = new StringBuilder();
+        var startCount = errors.Count;
 
-        if (!IsUsernameValid(username, out var errorUsername))
-            sb.AppendLine(errorUsername);
-
-        if (!IsPasswordValid(password, out var errorPassword))
-            sb.AppendLine(errorPassword);
-
+        IsUsernameValid(username, errors);
+        IsPasswordValid(password, errors);
         if (!IsEmailValid(email, out var errorEmail))
-            sb.AppendLine(errorEmail);
+            errors.Add(errorEmail);
 
-        if (sb.Length > 0)
-        {
-            error = sb.ToString();
+        if (startCount < errors.Count)
             return false;
-        }
+
+        password = _encryptionService
+            .Encrypt(password, out var hash, out var salt)
+            .Compose(hash, salt);
 
         var userEntity = new User()
         {
             Username = username,
-            Password = Encryption.SHA512(password),
+            Password = password,
             FullName = fullName,
             Email = email,
             DateRegistered = DateTime.UtcNow,
         };
-        user = new UserModel(_dbContext, userEntity);
+        user = new UserModel(_transactionService, _dbContext, userEntity);
         _dbContext.Users.Insert(userEntity);
         return true;
     }
@@ -141,21 +138,28 @@ internal partial class Authenticator : IAuthenticator
     public bool TryLogin(
         string username,
         string password,
-        [NotNullWhen(true)] out IUserModel? user)
+        [NotNullWhen(true)] out IUserModel? user,
+        [NotNullWhen(false)] out string? error)
     {
         user = null;
-        password = Encryption.SHA512(password);
+        error = null;
 
         var userEntity = _dbContext.Users.All
-            .FirstOrDefault(u => u.Username.Equals(username) && u.Password.Equals(password));
+            .FirstOrDefault(u => u.Username.Equals(username));
 
-        if (userEntity is null)
+        if (userEntity is null
+            || !_encryptionService
+                .Decompose(userEntity.Password, out var hash, out var salt)
+                .Verify(password, hash, salt))
+        {
+            error = "No Username and Password match was found";
             return false;
+        }
 
-        user = new UserModel(_dbContext, userEntity);
+        user = new UserModel(_transactionService, _dbContext, userEntity);
         return true;
     }
 
-    [GeneratedRegex("^(?=.{1,256}$)(?=.{1,64}@.{1,255}$)(?=.{1,253}\\..{1,253}$)(?=.{1,64}@.{1,64}@.{1,255}$)^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@([a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$\r\n")]
+    [GeneratedRegex("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")]
     private static partial Regex RegexEmailValidation();
 }

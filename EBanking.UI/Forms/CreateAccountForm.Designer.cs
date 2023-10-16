@@ -47,14 +47,14 @@ partial class CreateAccount
         _tbName.Location = new Point(67, 12);
         _tbName.Name = "_tbName";
         _tbName.Size = new Size(127, 27);
-        _tbName.TabIndex = 1;
+        _tbName.TabIndex = 0;
         // 
         // _btnOK
         // 
         _btnOK.Location = new Point(11, 45);
         _btnOK.Name = "_btnOK";
         _btnOK.Size = new Size(184, 29);
-        _btnOK.TabIndex = 2;
+        _btnOK.TabIndex = 1;
         _btnOK.Text = "OK";
         _btnOK.UseVisualStyleBackColor = true;
         _btnOK.Click += BtnOK_Click;

@@ -1,47 +1,37 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.Text;
 using EBanking.Data.Entities;
-using EBanking.Logic.Models;
-using EBanking.Logic.Services;
 using EBanking.UI.ViewModels;
 
 namespace EBanking.UI.Forms;
 
-public partial class AlterAccountBalanceForm : Form
+internal partial class AlterAccountBalanceForm : Form
 {
     private readonly UserAccountViewModel[] _userAccountViewModels;
-    private readonly ITransactionService _transactionService;
-    private readonly IUserModel _user;
-    private readonly TransactionType _transactionType;
+    private readonly UserViewModel _user;
+    private readonly TransactionType _type;
 
-    public AlterAccountBalanceForm(ITransactionService transactionService, IUserModel user, TransactionType transactionType)
+    public AlterAccountBalanceForm(UserViewModel user, TransactionType type)
     {
         InitializeComponent();
-        _transactionService = transactionService;
         _user = user;
-        _transactionType = Enum.IsDefined(transactionType)
-            ? transactionType
-            : throw new InvalidEnumArgumentException(nameof(transactionType), (int)transactionType, typeof(TransactionType));
+        _type = Enum.IsDefined(type)
+            ? type
+            : throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(TransactionType));
 
-        Text = _transactionType switch
+        Text = _type switch
         {
             TransactionType.Debit => "Withdraw",
             TransactionType.Credit => "Deposit",
             _ => throw new UnreachableException(),
         };
 
-        _userAccountViewModels = _user.UserAccounts
-            .Select(ua => new UserAccountViewModel(ua))
-            .ToArray();
-
+        _userAccountViewModels = _user.UserAccounts.ToArray();
         _lbxAccounts.Items.AddRange(_userAccountViewModels);
     }
 
     private void BtnConfirm_Click(object sender, EventArgs e)
     {
-        var sb = new StringBuilder();
-
         if (_lbxAccounts.SelectedIndex == -1)
         {
             MessageBox.Show(
@@ -54,26 +44,26 @@ public partial class AlterAccountBalanceForm : Form
         }
 
         if (!decimal.TryParse(_tbAmount.Text, out var amount))
-            sb.AppendLine("Amount is not a valid number");
-
-        else if (_transactionService.IsAmountValid(amount, out var errorAmount))
-            sb.AppendLine(errorAmount);
-
-
-        if (sb.Length == 0)
         {
-            if (_userAccountViewModels[_lbxAccounts.SelectedIndex].UserAccount
-                .TryAlterBalance(amount, _transactionType, out var errorAlter))
-            {
-                Close();
-                return;
-            }
+            MessageBox.Show(
+                "Amount is not a valid number",
+                "Invalid Amount!",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
 
-            sb.AppendLine(errorAlter);
+            return;
+        }
+
+        var errors = new List<string>();
+        if (_userAccountViewModels[_lbxAccounts.SelectedIndex]
+            .TryAlterBalance(amount, _type, errors))
+        {
+            Close();
+            return;
         }
 
         MessageBox.Show(
-            sb.ToString(),
+            string.Join(Environment.NewLine, errors),
             $"Invalid {Text}",
             MessageBoxButtons.OK,
             MessageBoxIcon.Error);

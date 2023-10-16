@@ -5,14 +5,61 @@ namespace EBanking.UI.ViewModels;
 
 internal class UserAccountViewModel
 {
-    internal IUserAccountModel UserAccount { get; }
+    private readonly IUserAccountModel _userAccount;
 
-    public int Id => UserAccount.Id;
-    public Guid Key => UserAccount.Key;
-    public string Name => UserAccount.Name;
-    public decimal Balance => UserAccount.Balance;
+    public Guid Key => _userAccount.Key;
+    public string Name => _userAccount.Name;
+    public decimal Balance => _userAccount.Balance;
 
-    public UserAccountViewModel(IUserAccountModel userAccount) => UserAccount = userAccount;
+    public IEnumerable<TransactionViewModel> Transactions =>
+        _userAccount.Transactions.Select(t => new TransactionViewModel(t));
+
+    public UserAccountViewModel(IUserAccountModel userAccount) => _userAccount = userAccount;
 
     public override string ToString() => $"{Name}: {Balance:0.00}";
+
+    public bool TryAlterBalance(
+        decimal amount,
+        TransactionType type,
+        ICollection<string> errors)
+    {
+        var startCount = errors.Count;
+        var transactionService = _userAccount.TransactionService;
+
+        if (transactionService.IsAmountValid(amount, errors))
+        {
+            if (type == TransactionType.Debit
+                && !transactionService.IsDebitValid(_userAccount.Balance, amount, out _, out var errorTax))
+            {
+                errors.Add(errorTax);
+            }
+        }
+
+        return startCount == errors.Count
+            && _userAccount.TryAlterBalance(amount, type, errors);
+    }
+
+    public bool TryTransfer(
+        Guid recieverKey,
+        decimal amount,
+        ICollection<string> errors)
+    {
+        var startCount = errors.Count;
+        var transactionService = _userAccount.TransactionService;
+
+        if (transactionService.IsAmountValid(amount, errors)
+            && Balance - amount < 0)
+        {
+            errors.Add("Insufficient amount");
+        }
+
+        if (Key.Equals(recieverKey))
+            errors.Add("Please enter a Key of another account");
+
+        else if (!transactionService.IsKeyExisting(recieverKey, out var errorKey))
+            errors.Add(errorKey);
+
+        return startCount == errors.Count
+            && _userAccount.TryTransfer(recieverKey, amount, errors);
+    }
 }

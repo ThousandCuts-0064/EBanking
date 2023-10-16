@@ -1,27 +1,21 @@
-﻿using EBanking.Data.Entities;
-using EBanking.Data.Interfaces;
+﻿using EBanking.UI.ViewModels;
 
 namespace EBanking.UI.Forms;
 
-public partial class TransactionHistory : Form
+internal partial class TransactionHistory : Form
 {
-    private readonly IEbankingDbContext _dbContext;
-    private readonly User _user;
+    private readonly UserViewModel _user;
 
-    public TransactionHistory(IEbankingDbContext dbContext, User user)
+    public TransactionHistory(UserViewModel user)
     {
         InitializeComponent();
-        _dbContext = dbContext;
         _user = user;
         Text = _user.FullName;
-        Dictionary<int, string> userAccounts = _dbContext.UserAccounts.All
-            .Where(ua => ua.UserId == _user.Id)
-            .ToDictionary(ua => ua.Id, ua => ua.FriendlyName);
-        _dgvMain.DataSource = _dbContext.Transactions.All
-            .Where(t => userAccounts.ContainsKey(t.UserAccountId))
+        _dgvMain.DataSource = _user.UserAccounts
+            .SelectMany(ua => ua.Transactions)
             .Select(t => new
             {
-                Account = userAccounts[t.UserAccountId],
+                Account = t.UserAccount.Name,
                 t.Type,
                 Amount = t.Amount.ToString("0.00"),
                 Date = t.EventDate

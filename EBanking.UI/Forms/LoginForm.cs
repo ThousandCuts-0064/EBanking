@@ -1,12 +1,12 @@
-﻿using EBanking.Logic.Models;
-using EBanking.Logic.Services;
+﻿using EBanking.Logic.Services;
+using EBanking.UI.ViewModels;
 
 namespace EBanking.UI.Forms;
 
-public partial class LoginForm : Form
+internal partial class LoginForm : Form
 {
     private readonly IAuthenticator _authenticator;
-    public IUserModel? AuthenticatedUser { get; private set; }
+    public UserViewModel? AuthenticatedUser { get; private set; }
     public bool DoOpenRegister { get; private set; }
 
     public LoginForm(IAuthenticator authenticator)
@@ -23,15 +23,15 @@ public partial class LoginForm : Form
 
     private void BtnLogin_Click(object sender, EventArgs e)
     {
-        if (_authenticator.TryLogin(_tbUsername.Text, _tbPassword.Text, out var user))
+        if (_authenticator.TryLogin(_tbUsername.Text, _tbPassword.Text, out var user, out var error))
         {
-            AuthenticatedUser = user;
+            AuthenticatedUser = new UserViewModel(user);
             Close();
             return;
         }
 
         MessageBox.Show(
-            "No Username and Password match found",
+            error,
             "Invalid login",
             MessageBoxButtons.OK,
             MessageBoxIcon.Error);

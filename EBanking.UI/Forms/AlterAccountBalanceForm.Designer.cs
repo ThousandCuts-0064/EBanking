@@ -59,7 +59,7 @@ partial class AlterAccountBalanceForm
         _btnConfirm.Margin = new Padding(3, 4, 3, 4);
         _btnConfirm.Name = "_btnConfirm";
         _btnConfirm.Size = new Size(210, 68);
-        _btnConfirm.TabIndex = 6;
+        _btnConfirm.TabIndex = 2;
         _btnConfirm.Text = "Confirm";
         _btnConfirm.UseVisualStyleBackColor = true;
         _btnConfirm.Click += BtnConfirm_Click;
@@ -70,9 +70,9 @@ partial class AlterAccountBalanceForm
         _tbAmount.Margin = new Padding(3, 4, 3, 4);
         _tbAmount.Name = "_tbAmount";
         _tbAmount.Size = new Size(145, 27);
-        _tbAmount.TabIndex = 5;
+        _tbAmount.TabIndex = 1;
         // 
-        // UpdateAccount
+        // AlterAccountBalanceForm
         // 
         AutoScaleDimensions = new SizeF(8F, 20F);
         AutoScaleMode = AutoScaleMode.Font;
@@ -83,7 +83,7 @@ partial class AlterAccountBalanceForm
         Controls.Add(_lbxAccounts);
         FormBorderStyle = FormBorderStyle.FixedToolWindow;
         Margin = new Padding(3, 4, 3, 4);
-        Name = "UpdateAccount";
+        Name = "AlterAccountBalanceForm";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "UpdateAccountOption";
         ResumeLayout(false);

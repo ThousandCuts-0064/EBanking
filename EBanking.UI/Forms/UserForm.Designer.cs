@@ -49,7 +49,7 @@ partial class UserForm
         _btnCreateAccount.Location = new Point(3, 223);
         _btnCreateAccount.Name = "_btnCreateAccount";
         _btnCreateAccount.Size = new Size(92, 49);
-        _btnCreateAccount.TabIndex = 0;
+        _btnCreateAccount.TabIndex = 4;
         _btnCreateAccount.Text = "Create Account";
         _btnCreateAccount.UseVisualStyleBackColor = true;
         _btnCreateAccount.Click += BtnCreateAccount_Click;
@@ -88,7 +88,7 @@ partial class UserForm
         _btnDeposit.Location = new Point(3, 3);
         _btnDeposit.Name = "_btnDeposit";
         _btnDeposit.Size = new Size(92, 49);
-        _btnDeposit.TabIndex = 4;
+        _btnDeposit.TabIndex = 0;
         _btnDeposit.Text = "Deposit";
         _btnDeposit.UseVisualStyleBackColor = true;
         _btnDeposit.Click += BtnDeposit_Click;
@@ -101,7 +101,7 @@ partial class UserForm
         _btnWithdraw.Location = new Point(3, 58);
         _btnWithdraw.Name = "_btnWithdraw";
         _btnWithdraw.Size = new Size(92, 49);
-        _btnWithdraw.TabIndex = 5;
+        _btnWithdraw.TabIndex = 1;
         _btnWithdraw.Text = "Withdraw";
         _btnWithdraw.UseVisualStyleBackColor = true;
         _btnWithdraw.Click += BtnWithdraw_Click;
@@ -150,7 +150,7 @@ partial class UserForm
         _dgvAccounts.RowTemplate.Resizable = DataGridViewTriState.False;
         _dgvAccounts.SelectionMode = DataGridViewSelectionMode.CellSelect;
         _dgvAccounts.Size = new Size(412, 277);
-        _dgvAccounts.TabIndex = 7;
+        _dgvAccounts.TabIndex = 5;
         _dgvAccounts.VirtualMode = true;
         // 
         // _tlpMain

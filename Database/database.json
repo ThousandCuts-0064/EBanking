@@ -1,1 +1,86 @@
-{"UserSeq":1,"UserAccountSeq":1,"TransactionSeq":2,"Users":[{"Id":1,"Username":"Konus","Password":"㤔ጦ뫅쪸附뇱ἦ鰎翄덋鳵狼ฐ鑵퉦㒪頭鉺⤡銹࠭碆ꉙ뗌꠲�ꁞﳽ룞","FullName":"Konus","Email":"Konus@gmail.com","DateRegistered":"2023-10-10T15:58:46.7077002+03:00"}],"UserAccounts":[{"Id":1,"UserId":1,"Key":"efcac447-b224-4851-9c87-eb98275e619a","FriendlyName":"K","Balance":10010.0}],"Transactions":[{"Id":1,"UserAccountId":1,"Key":"211db18d-e602-4172-b36f-54e4d1db26e6","Type":2,"Amount":10.0,"EventDate":"2023-10-12T19:01:52.2036558+03:00","SystemComment":"Deposit to K(efcac447-b224-4851-9c87-eb98275e619a)"},{"Id":2,"UserAccountId":1,"Key":"0fde59fc-1a0f-45ff-bc65-b820418d4fcb","Type":2,"Amount":10000.0,"EventDate":"2023-10-12T19:03:37.256108+03:00","SystemComment":"Deposit to K(efcac447-b224-4851-9c87-eb98275e619a)"}]}
+{
+	"UserSeq": 2,
+	"UserAccountSeq": 2,
+	"TransactionSeq": 5,
+	"Users": [
+		{
+			"Id": 1,
+			"Username": "kaktus",
+			"Password": "WSLXBaRU2EgEl6ew6W9/IpfGb3T/7ZOYE5tX2Our2jI=-/n50Xw006A9Wc49E/Utztg==",
+			"FullName": "kaktus",
+			"Email": "kaktus@mail.com",
+			"DateRegistered": "2023-10-16T17:50:59.0167952Z"
+		},
+		{
+			"Id": 2,
+			"Username": "ananas",
+			"Password": "pZ7lRE2O4nalcOPavvaNUUpj2K41oiNi822vuWl2UXc=-Nw58O7s3VKkCBzyTl7kMKg==",
+			"FullName": "ananas",
+			"Email": "ananas@mail.com",
+			"DateRegistered": "2023-10-16T17:58:26.1085192Z"
+		}
+	],
+	"UserAccounts": [
+		{
+			"Id": 1,
+			"UserId": 2,
+			"Key": "81911909-b15d-4fcf-b428-23c82c6b965c",
+			"FriendlyName": "ananas",
+			"Balance": 150.0
+		},
+		{
+			"Id": 2,
+			"UserId": 1,
+			"Key": "fabf6dbd-0cda-473b-a3f5-ef971e4bfbf4",
+			"FriendlyName": "kaktus",
+			"Balance": 60.0
+		}
+	],
+	"Transactions": [
+		{
+			"Id": 1,
+			"UserAccountId": 1,
+			"Key": "353fb108-9b8d-400f-85af-8e0d04e3b8b2",
+			"Type": 2,
+			"Amount": 100.0,
+			"EventDate": "2023-10-16T20:58:43.0588559+03:00",
+			"SystemComment": "Deposit to ananas(81911909-b15d-4fcf-b428-23c82c6b965c)"
+		},
+		{
+			"Id": 2,
+			"UserAccountId": 2,
+			"Key": "0b69a968-e341-49ce-a959-3655bc2c3b82",
+			"Type": 2,
+			"Amount": 100.0,
+			"EventDate": "2023-10-16T20:59:08.2965252+03:00",
+			"SystemComment": "Deposit to kaktus(fabf6dbd-0cda-473b-a3f5-ef971e4bfbf4)"
+		},
+		{
+			"Id": 3,
+			"UserAccountId": 2,
+			"Key": "7e496ae4-5b47-4605-98af-b724027165d6",
+			"Type": 1,
+			"Amount": 50.0,
+			"EventDate": "2023-10-16T20:59:15.1472994+03:00",
+			"SystemComment": "kaktus(fabf6dbd-0cda-473b-a3f5-ef971e4bfbf4) made a transaction to ananas(81911909-b15d-4fcf-b428-23c82c6b965c)"
+		},
+		{
+			"Id": 4,
+			"UserAccountId": 1,
+			"Key": "7e496ae4-5b47-4605-98af-b724027165d6",
+			"Type": 2,
+			"Amount": 50.0,
+			"EventDate": "2023-10-16T20:59:15.1473058+03:00",
+			"SystemComment": "kaktus(fabf6dbd-0cda-473b-a3f5-ef971e4bfbf4) made a transaction to ananas(81911909-b15d-4fcf-b428-23c82c6b965c)"
+		},
+		{
+			"Id": 5,
+			"UserAccountId": 2,
+			"Key": "94460017-f00c-42d1-ab34-29a05fd5beec",
+			"Type": 2,
+			"Amount": 10.0,
+			"EventDate": "2023-10-16T21:18:17.3368434+03:00",
+			"SystemComment": "Deposit to kaktus(fabf6dbd-0cda-473b-a3f5-ef971e4bfbf4)"
+		}
+	]
+}
